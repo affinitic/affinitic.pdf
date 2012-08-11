@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+"""
+Created by mpeeters.
+Licensed under the GPL license, see LICENCE.txt for more details.
+Copyright by NetExpe sprl
+"""
+
+from reportlab.lib.units import mm
+
+from netexpe.pdf.style import Style
+from netexpe.pdf.tools import ColorRGB
+
+
+class StyleLibrary:
+
+    def __init__(self, base_style=None, unit=mm):
+        self._styles = {}
+        self._unit = unit
+        self.add('base', base_style or self._base_style)
+
+    def define(self, stylename, style):
+        """
+        Add a new style
+        """
+        style.text_indent *= self._unit
+        self._styles[stylename] = style
+
+    def get(self, stylename, inherits=None):
+        """
+        Gets a style by his name and inherits from other styles
+
+        Parameters
+        ----------
+         - stylename    (String)
+         - inherits *   (List) List of style names sorted by inherit position
+        * Optional
+        """
+        inherits = inherits or []
+        inherits.append('base')
+        style = self._styles[stylename].copy()
+        for inherited_style in inherits:
+            style.inherit(self._styles[inherited_style])
+        return style
+
+    @property
+    def _base_style(self):
+        """
+        Create and return a Style object with the default values
+        """
+        return Style(
+            color=ColorRGB(0, 0, 0),
+            text_align='left',
+            text_indent=0,
+            text_transform=None,
+            font_family='Helvetica',
+            font_size=9,
+            font_style='normal',
+            background_color=None,
+            border_color=None,
+            width=None,
+            height=None,
+            line_height=None)

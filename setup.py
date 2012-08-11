@@ -36,6 +36,8 @@ setup(
     install_requires=[
         'setuptools',
         'reportlab==2.5',
+        'pyPdf==1.13',
+        'css==0.1',
     ],
     extras_require=dict(
         tests=[

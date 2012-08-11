@@ -17,7 +17,7 @@ class Cursor(object):
         Moves the cursor from the current position.
         """
         self._position.x += x
-        self._position.y -= y
+        self._position.y += (y * -1)
 
     def move_to(self, x=None, y=None):
         """
@@ -42,6 +42,12 @@ class Cursor(object):
         """
         self._indent = value
 
+    def new_line(self):
+        """
+        Defines a new line
+        """
+        self._indent = 0
+
     @property
     def x(self):
         """
@@ -54,7 +60,21 @@ class Cursor(object):
         """
         Returns the current y position.
         """
-        return self._posittion.y
+        return self._position.y
+
+    @property
+    def position(self):
+        """
+        Returns the current position.
+        """
+        return Position(self.x, self.y)
+
+    @property
+    def real_position(self):
+        """
+        Returns the current position without the negative value for the y.
+        """
+        return Position(self.x, self.y * -1)
 
 
 class Position(object):
