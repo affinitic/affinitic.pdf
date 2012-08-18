@@ -7,7 +7,7 @@ Copyright by NetExpe sprl
 
 from reportlab.lib.units import mm
 
-from netexpe.pdf.style import Style
+from netexpe.pdf.style.style import Style
 from netexpe.pdf.tools import ColorRGB
 
 
@@ -16,13 +16,17 @@ class StyleLibrary:
     def __init__(self, base_style=None, unit=mm):
         self._styles = {}
         self._unit = unit
-        self.add('base', base_style or self._base_style)
+        if base_style is not None and base_style.validate() is False:
+            base_style.inherit(self._base_style)
+
+        self.define('base', base_style or self._base_style)
 
     def define(self, stylename, style):
         """
         Add a new style
         """
-        style.text_indent *= self._unit
+        if hasattr(style, 'text_indent') is True:
+            style.text_indent *= self._unit
         self._styles[stylename] = style
 
     def get(self, stylename, inherits=None):
@@ -41,6 +45,12 @@ class StyleLibrary:
         for inherited_style in inherits:
             style.inherit(self._styles[inherited_style])
         return style
+
+    def list(self):
+        """
+        Returns a list with all the styles names
+        """
+        return self._styles.keys()
 
     @property
     def _base_style(self):
