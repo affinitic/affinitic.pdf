@@ -13,8 +13,9 @@ from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
 
 from netexpe.pdf.flowable import ExtendedFlowable
-from netexpe.pdf.style import BasicStyles
+from netexpe.pdf.style import StyleLibrary
 from netexpe.pdf.table import Table
+from netexpe.pdf.tools import ColorRGB
 
 
 class Pdf:
@@ -35,7 +36,7 @@ class Pdf:
             leftMargin=margins[3] * measure_unit - 2 * mm)
         self._story = []
         self._currentElement = None
-        self._styles = styles or BasicStyles().styles
+        self._styles = styles or StyleLibrary()
 
     def add_element(self):
         """
@@ -55,18 +56,18 @@ class Pdf:
         element.draw_grid(size, width, height, color)
         self._story.insert(0, element)
 
-    def add_style(self, style, style_name):
+    def add_style(self, stylename, style):
         """
-        Adds a new style that can be used for paragraphs
+        Adds a new style
         """
-        self._styles[style_name] = style
+        self._styles.define(stylename, style)
 
     def add_paragraph(self, text, style='paragraph', width=None, height=None):
         """
         Adds a new paragraph element.
         """
         self._verify_element()
-        self._currentElement.draw_parapraph(text, self._styles[style],
+        self._currentElement.draw_parapraph(text, self._styles.get(style),
             width=width, height=height)
 
     def add_table(self):
@@ -75,6 +76,22 @@ class Pdf:
         """
         self._verify_element()
         return Table(self)
+
+    def add_h_line(self):
+        """
+        Adds a horizontal line.
+        """
+        self._verify_element()
+        self._currentElement.draw_h_line(self._document.width / mm,
+            color=ColorRGB(50, 50, 50))
+
+    def add_rectangle(self, width, height):
+        """
+        Adds a rectangle
+        """
+        self._verify_element()
+        self._currentElement.draw_rectangle(width, height,
+            bg_color=ColorRGB(240, 240, 240), fill=1, stroke=0)
 
     def define_background(self, filepath):
         """
