@@ -73,6 +73,11 @@ class ExtendedFlowable(Flowable):
             paragraph_height = kwargs['height'] * self.unit
 
         canvas = self.canv
+        # DEBUG
+        #from reportlab.lib.colors import black
+        #paragraph_style.borderWidth = 1
+        #paragraph_style.borderColor = black
+        # DEBUG
 
         paragraph = Paragraph(text, paragraph_style)
         width, height = paragraph.wrapOn(
@@ -145,7 +150,7 @@ class ExtendedFlowable(Flowable):
 
     draw_string = _add_element
     draw_parapraph = _add_element
-    draw_rectange = _add_element
+    draw_rectangle = _add_element
     draw_grid = _add_element
     draw_h_line = _add_element
     draw_v_line = _add_element
