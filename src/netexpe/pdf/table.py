@@ -38,11 +38,14 @@ class Table:
         """
         for column in self._columns:
             for row in self._rows:
+                column_style = self._pdf._styles.get(column.style)
+                row_style = self._pdf._styles.get(row.style)
                 self._pdf.add_paragraph(
                     getattr(row, column.name),
-                    width=column.style.width,
-                    height=row.style.height)
-            self._pdf.cursor.move(x=column.style.width, y=self._height * - 1)
+                    width=column_style.width,
+                    height=row_style.height,
+                    style=column.style)
+            self._pdf.cursor.move(x=column_style.width, y=self._height * - 1)
 
     @property
     def _height(self):
@@ -51,7 +54,7 @@ class Table:
         """
         height = 0
         for row in self._rows:
-            height += row.style.height
+            height += self._pdf._styles.get(row.style).height
         return height
 
 

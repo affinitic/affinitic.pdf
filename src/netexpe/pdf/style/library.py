@@ -20,6 +20,7 @@ class StyleLibrary:
             base_style.inherit(self._base_style)
 
         self.define('base', base_style or self._base_style)
+        self._defines_base_styles()
 
     def define(self, stylename, style):
         """
@@ -39,6 +40,8 @@ class StyleLibrary:
          - inherits *   (List) List of style names sorted by inherit position
         * Optional
         """
+        if stylename not in self._styles.keys():
+            raise ValueError("Unknown style '%s'" % stylename)
         inherits = inherits or []
         inherits.append('base')
         style = self._styles[stylename].copy()
@@ -70,3 +73,11 @@ class StyleLibrary:
             width=None,
             height=None,
             line_height=None)
+
+    def _defines_base_styles(self):
+        """
+        Create and return a bunch of basic styles
+        """
+        self.define('paragraph', Style())
+
+    add = define  # Alias for the define method
