@@ -46,6 +46,8 @@ class Table:
                     height=row_style.height,
                     style=column.style)
             self._pdf.cursor.move(x=column_style.width, y=self._height * - 1)
+        self._pdf.cursor.move_to(x=0)
+        self._pdf.cursor.move(y=self._height)
 
     @property
     def _height(self):
