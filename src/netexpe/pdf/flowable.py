@@ -31,11 +31,15 @@ class ExtendedFlowable(Flowable):
                 last_position = self._elements[
                     self._elements.index(element) - 1]['position']
                 self.cursor.move(x=position.x - last_position.x,
-                    y=position.y - last_position.y)
+                                 y=position.y - last_position.y)
             else:
                 self.cursor.move_to(x=position.x, y=position.y)
             method = getattr(self, element['name'])
             method(*element['args'], **element['kwargs'])
+
+    def drawOn(self, canvas, x, y, _sW=0):
+        Flowable.drawOn(self, canvas, x, y, _sW=_sW)
+        #canvas.showPage()
 
     def _add_element(self, *args, **kwargs):
         """
@@ -93,15 +97,13 @@ class ExtendedFlowable(Flowable):
             self.cursor.move(y=(paragraph_height - height) / self.unit)
 
     def _draw_rectangle(self,
-            width,
-            height,
-            bg_color=ColorRGB(r=150, g=150, b=150),
-            stroke_color=ColorRGB(r=200, g=200, b=200),
-            fill=0,
-            stroke=1):
-        """
-        Draws a rectangle
-        """
+                        width,
+                        height,
+                        bg_color=ColorRGB(r=150, g=150, b=150),
+                        stroke_color=ColorRGB(r=200, g=200, b=200),
+                        fill=0,
+                        stroke=1):
+        """ Draws a rectangle """
         self.canv.setStrokeColor(stroke_color.rgb)
         self.canv.setFillColor(bg_color.rgb)
         self.canv.rect(
@@ -113,10 +115,8 @@ class ExtendedFlowable(Flowable):
             stroke=stroke)
 
     def _draw_grid(self, size, width, height,
-            color=ColorRGB(r=150, g=150, b=150)):
-        """
-        Draws the grid
-        """
+                   color=ColorRGB(r=150, g=150, b=150)):
+        """ Draws the grid """
         self._draw_rectangle(width, height, stroke_color=color)
         for x in range(int(width) / size):
             self.cursor.move(x=size)

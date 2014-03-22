@@ -35,7 +35,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'reportlab==2.5',
+        'reportlab==2.7',
         'pyPdf==1.13',
         'css==0.1',
     ],

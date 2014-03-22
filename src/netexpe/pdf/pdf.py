@@ -9,6 +9,7 @@ from cStringIO import StringIO
 
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus.flowables import PageBreak
 from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
 
@@ -18,13 +19,13 @@ from netexpe.pdf.table import Table
 from netexpe.pdf.tools import ColorRGB
 
 
-class Pdf:
+class Pdf(object):
 
     def __init__(self,
-            format=A4,
-            margins=[10, 10, 10, 10],
-            measure_unit=mm,
-            styles=None):
+                 format=A4,
+                 margins=[10, 10, 10, 10],
+                 measure_unit=mm,
+                 styles=None):
         self._measure_unit = measure_unit
         self._io = StringIO()
         self._document = SimpleDocTemplate(
@@ -37,6 +38,27 @@ class Pdf:
         self._story = []
         self._currentElement = None
         self._styles = styles or StyleLibrary()
+
+    @property
+    def width(self):
+        """ Return the document width """
+        doc = self._document
+        width = doc.width / self._measure_unit
+        margin = (doc.rightMargin + doc.leftMargin) / self._measure_unit
+        return width - margin
+
+    @property
+    def height(self):
+        """ Return the document height """
+        doc = self._document
+        height = doc.height / self._measure_unit
+        margin = (doc.topMargin + doc.bottomMargin) / self._measure_unit
+        return height - margin
+
+    def add_page_break(self):
+        """ Add a page break element """
+        self._story.append(PageBreak())
+        self.add_element()
 
     def add_element(self):
         """
@@ -68,7 +90,7 @@ class Pdf:
         """
         self._verify_element()
         self._currentElement.draw_parapraph(text, self._styles.get(style),
-            width=width, height=height)
+                                            width=width, height=height)
 
     def add_table(self):
         """
@@ -77,21 +99,21 @@ class Pdf:
         self._verify_element()
         return Table(self)
 
-    def add_h_line(self):
+    def add_h_line(self, color=ColorRGB(50, 50, 50)):
         """
         Adds a horizontal line.
         """
         self._verify_element()
         self._currentElement.draw_h_line(self._document.width / mm,
-            color=ColorRGB(50, 50, 50))
+                                         color=color)
 
     def add_rectangle(self, width, height):
         """
         Adds a rectangle
         """
         self._verify_element()
-        self._currentElement.draw_rectangle(width, height,
-            bg_color=ColorRGB(240, 240, 240), fill=1, stroke=0)
+        self._currentElement.draw_rectangle(
+            width, height, bg_color=ColorRGB(240, 240, 240), fill=1, stroke=0)
 
     def define_background(self, filepath):
         """
@@ -132,11 +154,11 @@ class Pdf:
         """
         output = PdfFileWriter()
         background = PdfFileReader(open(self._background, 'rb'))
-        content_file = file('qsdqsd', 'wb+')
+        content_file = file('/tmp/merge.pdf', 'wb+')
         content_file.write(io_content)
         content = PdfFileReader(content_file)
         for page in content.pages:
-            merged_content = background.getPage(0)
-            merged_content.mergePage(page)
-            output.addPage(merged_content)
+            background_content = background.getPage(0)
+            page.mergePage(background_content)
+            output.addPage(page)
         output.write(output_file)
