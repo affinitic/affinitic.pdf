@@ -26,7 +26,7 @@ setup(
     keywords='',
     author='',
     author_email='',
-    url='http://svn.plone.org/svn/collective/',
+    url='https://github.com/affinitic/affinitic.pdf',
     license='gpl',
     packages=find_packages('src'),
     package_dir={'': 'src'},
