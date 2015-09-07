@@ -13,12 +13,29 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 from reportlab.lib.styles import ParagraphStyle
 
 
-class Style:
-    _accepted_attrs = ('color', 'text_align', 'text_indent', 'text_transform',
-        'font_family', 'font_size', 'font_style', 'background_color',
-        'border_color', 'width', 'height', 'line_height')
-    _mandatory_attrs = ('color', 'text_align', 'text_indent', 'font_family',
-        'font_size', 'font_style')
+class Style(object):
+    _accepted_attrs = (
+        'color',
+        'text_align',
+        'text_indent',
+        'text_transform',
+        'font_family',
+        'font_size',
+        'font_style',
+        'background_color',
+        'border_color',
+        'width',
+        'height',
+        'line_height',
+    )
+    _mandatory_attrs = (
+        'color',
+        'text_align',
+        'text_indent',
+        'font_family',
+        'font_size',
+        'font_style',
+    )
     _paragraph_styles_match = {
         '_color': 'textColor',
         '_text_align': 'alignment',
@@ -37,14 +54,12 @@ class Style:
             setattr(self, arg, kwargs[arg])
 
     def copy(self):
-        """
-        Returns a copy of the current object
-        """
+        """Return a copy of the current object"""
         return copy.deepcopy(self)
 
     def inherit(self, style):
         """
-        Updates the current style by inheriting of the given style for the
+        Update the current style by inheriting of the given style for the
         undefined properties
         """
         for property_name in style.__dict__:
@@ -54,9 +69,7 @@ class Style:
                 setattr(self, property_name, getattr(style, property_name))
 
     def validate(self):
-        """
-        Verifies if all the mandatory attributes are defined
-        """
+        """Verify if all the mandatory attributes are defined"""
         for attr in self._mandatory_attrs:
             if hasattr(self, attr) is False or getattr(self, attr) is None:
                 return False
@@ -65,20 +78,18 @@ class Style:
     @property
     def paragraph_style(self):
         """
-        Returns a ParagraphStyle object that match to the current style
+        Return a ParagraphStyle object that match to the current style
         attributes
         """
         style = ParagraphStyle('style')
         for key in self._paragraph_styles_match:
             setattr(style, self._paragraph_styles_match[key],
-                getattr(self, key))
+                    getattr(self, key))
         return style
 
     @property
     def _text_align(self):
-        """
-        Parses the text_align property
-        """
+        """Parse the text_align property"""
         align_dict = {
             'LEFT': TA_LEFT,
             'CENTER': TA_CENTER,
@@ -87,14 +98,12 @@ class Style:
         }
         if self.text_align.upper() not in align_dict.keys():
             raise ValueError("Unknown value '%s' for the text_align "
-                u"property" % self.text_align)
+                             u"property" % self.text_align)
         return align_dict[self.text_align.upper()]
 
     @property
     def _text_transform(self):
-        """
-        Parses the text_transform property
-        """
+        """Parse the text_transform property"""
         transform_dict = {
             'UPPERCASE': 'uppercase',
             'LOWERCASE': 'lowercase',
@@ -103,21 +112,17 @@ class Style:
             return
         if self.text_transform.upper() not in transform_dict.keys():
             raise ValueError(u"Unknow value '%' for the text_transform "
-                u"property" % self.text_transform)
+                             u"property" % self.text_transform)
         return transform_dict[self.text_transform.upper()]
 
     @property
     def _line_height(self):
-        """
-        Returns the line_height property or 120% of font_size
-        """
+        """Return the line_height property or 120% of font_size"""
         if self.line_height is None:
             return self.font_size * 1.2
         return self.line_height
 
     @property
     def _color(self):
-        """
-        Returns the CYMK color for the color attribute.
-        """
+        """Return the CYMK color for the color attribute"""
         return self.color.cmyk

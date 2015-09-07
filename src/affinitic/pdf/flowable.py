@@ -8,9 +8,9 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
-import inspect
-
 from reportlab.platypus import Flowable, Paragraph
+
+import inspect
 
 from affinitic.pdf.cursor import Cursor
 from affinitic.pdf.tools import ColorRGB
@@ -25,9 +25,7 @@ class ExtendedFlowable(Flowable):
         self._elements = []
 
     def draw(self):
-        """
-        Draw the elements
-        """
+        """Draw the elements"""
         for element in self._elements:
             position = element['position']
             if self._elements.index(element) > 0:
@@ -42,12 +40,10 @@ class ExtendedFlowable(Flowable):
 
     def drawOn(self, canvas, x, y, _sW=0):
         Flowable.drawOn(self, canvas, x, y, _sW=_sW)
-        #canvas.showPage()
+        # canvas.showPage()
 
     def _add_element(self, *args, **kwargs):
-        """
-        Adds an element.
-        """
+        """Add an element"""
         self._elements.append({
             'name': '_%s' % inspect.stack()[1][3].replace('add', 'draw'),
             'args': args,
@@ -56,8 +52,8 @@ class ExtendedFlowable(Flowable):
 
     def _draw_string(self, value=''):
         """
-        Uses the flowable drawString methods to add a string on the current
-        cursor position.
+        Use the flowable drawString methods to add a string on the current
+        cursor position
         """
         self.canv.drawString(
             self.cursor.x * self.unit,
@@ -65,9 +61,7 @@ class ExtendedFlowable(Flowable):
             value)
 
     def _draw_paragraph(self, text, style, **kwargs):
-        """
-        Draws a paragraph.
-        """
+        """Draw a paragraph"""
         paragraph_style = style.paragraph_style
         if 'width' not in kwargs.keys() or kwargs['width'] is None:
             paragraph_width = self._frame.width - (self.cursor.x * self.unit)
@@ -81,9 +75,9 @@ class ExtendedFlowable(Flowable):
 
         canvas = self.canv
         # DEBUG
-        #from reportlab.lib.colors import black
-        #paragraph_style.borderWidth = 1
-        #paragraph_style.borderColor = black
+        # from reportlab.lib.colors import black
+        # paragraph_style.borderWidth = 1
+        # paragraph_style.borderColor = black
         # DEBUG
 
         paragraph = Paragraph(text, paragraph_style)
@@ -106,7 +100,7 @@ class ExtendedFlowable(Flowable):
                         stroke_color=ColorRGB(r=200, g=200, b=200),
                         fill=0,
                         stroke=1):
-        """ Draws a rectangle """
+        """Draw a rectangle"""
         self.canv.setStrokeColor(stroke_color.rgb)
         self.canv.setFillColor(bg_color.rgb)
         self.canv.rect(
@@ -119,7 +113,7 @@ class ExtendedFlowable(Flowable):
 
     def _draw_grid(self, size, width, height,
                    color=ColorRGB(r=150, g=150, b=150)):
-        """ Draws the grid """
+        """Draw the grid"""
         self._draw_rectangle(width, height, stroke_color=color)
         for x in range(int(width) / size):
             self.cursor.move(x=size)
@@ -130,9 +124,7 @@ class ExtendedFlowable(Flowable):
             self._draw_h_line(width, color=color)
 
     def _draw_h_line(self, width, color=ColorRGB(r=150, g=150, b=150)):
-        """
-        Draws an horizontal line
-        """
+        """Draw an horizontal line"""
         self.canv.setStrokeColor(color.rgb)
         self.canv.line(
             self.cursor.x * self.unit,
@@ -141,9 +133,7 @@ class ExtendedFlowable(Flowable):
             self.cursor.y * self.unit)
 
     def _draw_v_line(self, height, color=ColorRGB(r=150, g=150, b=150)):
-        """
-        Draws a vertical line
-        """
+        """Draw a vertical line"""
         self.canv.setStrokeColor(color.rgb)
         self.canv.line(
             self.cursor.x * self.unit,

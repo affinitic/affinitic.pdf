@@ -21,8 +21,8 @@ setup(
     # Get more strings from
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-      "Programming Language :: Python",
-      ],
+        "Programming Language :: Python",
+    ],
     keywords='',
     author='',
     author_email='',
@@ -42,8 +42,9 @@ setup(
     extras_require=dict(
         tests=[
             'unittest2',
-        ]),
+        ],
+    ),
     entry_points="""
     # -*- Entry points: -*-
     """,
-    )
+)

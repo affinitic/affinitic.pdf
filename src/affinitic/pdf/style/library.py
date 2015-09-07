@@ -14,7 +14,7 @@ from affinitic.pdf.style.style import Style
 from affinitic.pdf.tools import ColorRGB
 
 
-class StyleLibrary:
+class StyleLibrary(object):
 
     def __init__(self, base_style=None, unit=mm):
         self._styles = {}
@@ -26,16 +26,14 @@ class StyleLibrary:
         self._defines_base_styles()
 
     def define(self, stylename, style):
-        """
-        Add a new style
-        """
+        """Add a new style"""
         if hasattr(style, 'text_indent') is True:
             style.text_indent *= self._unit
         self._styles[stylename] = style
 
     def get(self, stylename, inherits=None):
         """
-        Gets a style by his name and inherits from other styles
+        Get a style by his name and inherits from other styles
 
         Parameters
         ----------
@@ -53,16 +51,12 @@ class StyleLibrary:
         return style
 
     def list(self):
-        """
-        Returns a list with all the styles names
-        """
+        """Return a list with all the styles names"""
         return self._styles.keys()
 
     @property
     def _base_style(self):
-        """
-        Create and return a Style object with the default values
-        """
+        """Create and return a Style object with the default values"""
         return Style(
             color=ColorRGB(0, 0, 0),
             text_align='left',
@@ -78,9 +72,7 @@ class StyleLibrary:
             line_height=None)
 
     def _defines_base_styles(self):
-        """
-        Create and return a bunch of basic styles
-        """
+        """Create and return a bunch of basic styles"""
         self.define('paragraph', Style())
 
     add = define  # Alias for the define method

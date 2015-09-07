@@ -18,9 +18,7 @@ class TestStyle(unittest2.TestCase):
 
     @property
     def _base_style(self):
-        """
-        Creates and return a basic style where all attributes are defined
-        """
+        """Create and return a basic style where all attributes are defined"""
         return Style(
             color=ColorRGB(0, 0, 0),
             text_align='left',
@@ -37,7 +35,7 @@ class TestStyle(unittest2.TestCase):
 
     def test_init_accepted_arguments(self):
         """
-        Tests Style.__init__(self, **kwargs) with accepted keyword arguments
+        Test Style.__init__(self, **kwargs) with accepted keyword arguments
         """
         style = Style(text_align='center', font_size=8)
 
@@ -46,12 +44,12 @@ class TestStyle(unittest2.TestCase):
 
     def test_init_refused_arguments(self):
         """
-        Tests Style.__init__(self, **kwargs) with refused keyword arguments
+        Test Style.__init__(self, **kwargs) with refused keyword arguments
         """
         self.assertRaises(ValueError, Style, foo='bar')
 
     def test_copy(self):
-        """ Tests Style.copy(self) """
+        """Test Style.copy(self)"""
         style1 = Style(text_align='center')
         style2 = style1.copy()
         style2.text_align = 'right'
@@ -60,7 +58,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals('right', style2.text_align)
 
     def test_inherit(self):
-        """ Tests Style.inherit(self, style) """
+        """Test Style.inherit(self, style)"""
         style1 = Style(text_align='center')
         style2 = Style(text_align='right', font_size=10)
         style1.inherit(style2)
@@ -69,7 +67,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals(10, style1.font_size)
 
     def test_validate(self):
-        """ Tests Style.validate(self) """
+        """Test Style.validate(self)"""
         style1 = self._base_style.copy()
         style1.color = None
 
@@ -77,7 +75,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals(True, self._base_style.validate())
 
     def test_paragraph_style_property_known_value(self):
-        """ Tests Style.paragraph_style """
+        """Test Style.paragraph_style"""
         from reportlab.lib.styles import ParagraphStyle
 
         paragraph_style = self._base_style.paragraph_style
@@ -87,7 +85,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals('Helvetica', paragraph_style.fontName)
 
     def test_text_align_property(self):
-        """ Tests Style._text_align """
+        """Test Style._text_align"""
         style1 = Style(text_align='center')
         style2 = Style(text_align='foo')
 
@@ -95,7 +93,7 @@ class TestStyle(unittest2.TestCase):
         self.assertRaises(ValueError, lambda: style2._text_align)
 
     def test_text_transform_property(self):
-        """ Tests Style._text_transform """
+        """Test Style._text_transform"""
         style1 = Style(text_transform='Uppercase')
         style2 = Style(text_transform='foo')
         style3 = Style(text_transform=None)
@@ -105,7 +103,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals(None, style3._text_transform)
 
     def test_line_height_property(self):
-        """ Tests Style._line_height """
+        """Test Style._line_height"""
         style1 = Style(line_height=10, font_size=9)
         style2 = Style(line_height=None, font_size=10)
 
@@ -113,7 +111,7 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals(12, style2._line_height)
 
     def test_color_property(self):
-        """ Tests Style._color """
+        """Test Style._color"""
         from reportlab.lib.colors import CMYKColor
 
         style = Style(color=ColorRGB(0, 0, 0))
@@ -128,7 +126,7 @@ class TestStyle(unittest2.TestCase):
 class TestStyleLibrary(unittest2.TestCase):
 
     def test_init_without_base(self):
-        """ Tests StyleLibrary.__init__(self, base_style=None, unit=mm) """
+        """Test StyleLibrary.__init__(self, base_style=None, unit=mm)"""
         from reportlab.lib.units import mm
 
         lib = StyleLibrary()
@@ -139,7 +137,7 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals(9, lib._styles['base'].font_size)
 
     def test_init_with_base(self):
-        """ Tests StyleLibrary.__init__(self, base_style=None, unit=mm) """
+        """Test StyleLibrary.__init__(self, base_style=None, unit=mm)"""
         base = Style(font_size=12)
         self.assertFalse(hasattr(base, 'text_indent'))
 
@@ -151,7 +149,7 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals(0, lib._styles['base'].text_indent)
 
     def test_define(self):
-        """ Tests StyleLibrary.define(self, stylename, style) """
+        """Test StyleLibrary.define(self, stylename, style)"""
         from reportlab.lib.units import mm
 
         style = Style(font_size=10, text_indent=1)
@@ -163,7 +161,7 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals(mm, lib._styles['test'].text_indent)
 
     def test_get_no_inherits(self):
-        """ Tests StyleLibrary.get(self, stylename, inherits=None) """
+        """Test StyleLibrary.get(self, stylename, inherits=None)"""
         style = Style(font_size=10)
         lib = StyleLibrary()
         lib.define('test', style)
@@ -174,7 +172,7 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals('Helvetica', result.font_family)  # Inherited
 
     def test_get_single_inherit(self):
-        """ Tests StyleLibrary.get(self, stylename, inherits=None) """
+        """Test StyleLibrary.get(self, stylename, inherits=None)"""
         style1 = Style(font_size=10)
         style2 = Style(font_size=12, text_align='center')
         lib = StyleLibrary()
@@ -190,11 +188,11 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals('Helvetica', result.font_family)
 
     def test_get_multiple_inherits(self):
-        """ Tests StyleLibrary.get(self, stylename, inherits=None) """
+        """Test StyleLibrary.get(self, stylename, inherits=None)"""
         style1 = Style(font_size=10)
         style2 = Style(font_size=11, text_align='center')
         style3 = Style(font_size=12, text_align='right',
-            text_transform='uppercase')
+                       text_transform='uppercase')
         lib = StyleLibrary()
         lib.define('test1', style1)
         lib.define('test2', style2)
@@ -211,12 +209,12 @@ class TestStyleLibrary(unittest2.TestCase):
         self.assertEquals('Helvetica', result.font_family)
 
     def test_list(self):
-        """ Tests StyleLibrary.list(self) """
+        """Test StyleLibrary.list(self)"""
         lib = StyleLibrary()
         self.assertEquals(lib.list(), lib._styles.keys())
 
     def test_base_style_property(self):
-        """ Tests StyleLibrary._base_style """
+        """Test StyleLibrary._base_style"""
         from affinitic.pdf.tools import ColorRGB
 
         lib = StyleLibrary()

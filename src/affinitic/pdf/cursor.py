@@ -8,6 +8,7 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+
 class Cursor(object):
 
     def __init__(self, x=0, y=0, indent=0):
@@ -15,16 +16,14 @@ class Cursor(object):
         self._indent = indent
 
     def move(self, x=0, y=0):
-        """
-        Moves the cursor from the current position.
-        """
+        """Move the cursor from the current position"""
         self._position.x += x
         self._position.y += (y * -1)
 
     def move_to(self, x=None, y=None):
         """
         Places the cursor to a specified position and reinitialize the
-        indentation.
+        indentation
         """
         if x is not None:
             self._position.x = x
@@ -33,56 +32,40 @@ class Cursor(object):
             self._position.y = y * -1
 
     def indent(self, value):
-        """
-        Increase or decrease the current identation.
-        """
+        """Increase or decrease the current identation"""
         self._indent += value
 
     def indent_to(self, value):
-        """
-        Redefines the indentation.
-        """
+        """Redefine the indentation"""
         self._indent = value
 
     def new_line(self):
-        """
-        Defines a new line
-        """
+        """Define a new line"""
         self._indent = 0
 
     @property
     def x(self):
-        """
-        Returns the current x position.
-        """
+        """Return the current x position"""
         return self._position.x + self._indent
 
     @property
     def y(self):
-        """
-        Returns the current y position.
-        """
+        """Return the current y position"""
         return self._position.y
 
     @property
     def position(self):
-        """
-        Returns the current position.
-        """
+        """Return the current position"""
         return Position(self.x, self.y)
 
     @property
     def real_position(self):
-        """
-        Returns the current position without the negative value for the y.
-        """
+        """Return the current position without the negative value for the y"""
         return Position(self.x, self.y * -1)
 
 
 class Position(object):
-    """
-    An object containing the x and y values of the cursor
-    """
+    """An object containing the x and y values of the cursor"""
 
     def __init__(self, x, y):
         self.x = x
