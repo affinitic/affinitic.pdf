@@ -132,7 +132,7 @@ class TestStyleLibrary(unittest2.TestCase):
         lib = StyleLibrary()
 
         self.assertEquals(mm, lib._unit)
-        self.assertEquals(1, len(lib._styles.keys()))
+        self.assertEqual(['base', 'paragraph'], lib._styles.keys())
         self.assertEquals('base', lib._styles.keys()[0])
         self.assertEquals(9, lib._styles['base'].font_size)
 
@@ -143,7 +143,7 @@ class TestStyleLibrary(unittest2.TestCase):
 
         lib = StyleLibrary(base_style=base)
 
-        self.assertEquals(1, len(lib._styles.keys()))
+        self.assertEqual(['base', 'paragraph'], lib._styles.keys())
         self.assertEquals('base', lib._styles.keys()[0])
         self.assertEquals(12, lib._styles['base'].font_size)
         self.assertEquals(0, lib._styles['base'].text_indent)
@@ -156,8 +156,8 @@ class TestStyleLibrary(unittest2.TestCase):
         lib = StyleLibrary()
         lib.define('test', style)
 
-        self.assertEquals(2, len(lib._styles.keys()))
-        self.assertEquals(sorted(['base', 'test']), sorted(lib._styles.keys()))
+        self.assertEquals(sorted(['base', 'paragraph', 'test']),
+                          sorted(lib._styles.keys()))
         self.assertEquals(mm, lib._styles['test'].text_indent)
 
     def test_get_no_inherits(self):
