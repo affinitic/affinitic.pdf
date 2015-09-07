@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created by mpeeters.
-Licensed under the GPL license, see LICENCE.txt for more details.
-Copyright by NetExpe sprl
+affinitic.pdf
+-------------
+
+Created by mpeeters
+:copyright: (c) 2015 by Affinitic SPRL
+:license: GPL, see LICENCE.txt for more details.
 """
 
 from cStringIO import StringIO
@@ -13,10 +16,10 @@ from reportlab.platypus.flowables import PageBreak
 from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
 
-from netexpe.pdf.flowable import ExtendedFlowable
-from netexpe.pdf.style import StyleLibrary
-from netexpe.pdf.table import Table
-from netexpe.pdf.tools import ColorRGB
+from affinitic.pdf.flowable import ExtendedFlowable
+from affinitic.pdf.style import StyleLibrary
+from affinitic.pdf.table import Table
+from affinitic.pdf.tools import ColorRGB
 
 
 class Pdf(object):

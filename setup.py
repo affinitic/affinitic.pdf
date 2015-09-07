@@ -14,7 +14,7 @@ long_description = (
     + '\n')
 
 setup(
-    name='netexpe.pdf',
+    name='affinitic.pdf',
     version=version,
     description="Tools for the creation of pdf with reportlab",
     long_description=long_description,
@@ -30,7 +30,7 @@ setup(
     license='gpl',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['netexpe'],
+    namespace_packages=['affinitic'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[

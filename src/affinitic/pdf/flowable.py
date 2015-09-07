@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created by mpeeters.
-Licensed under the GPL license, see LICENCE.txt for more details.
-Copyright by NetExpe sprl
+affinitic.pdf
+-------------
+
+Created by mpeeters
+:copyright: (c) 2015 by Affinitic SPRL
+:license: GPL, see LICENCE.txt for more details.
 """
 
 import inspect
 
 from reportlab.platypus import Flowable, Paragraph
 
-from netexpe.pdf.cursor import Cursor
-from netexpe.pdf.tools import ColorRGB
+from affinitic.pdf.cursor import Cursor
+from affinitic.pdf.tools import ColorRGB
 
 
 class ExtendedFlowable(Flowable):

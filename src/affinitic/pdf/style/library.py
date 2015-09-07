@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created by mpeeters.
-Licensed under the GPL license, see LICENCE.txt for more details.
-Copyright by NetExpe sprl
+affinitic.pdf
+-------------
+
+Created by mpeeters
+:copyright: (c) 2015 by Affinitic SPRL
+:license: GPL, see LICENCE.txt for more details.
 """
 
 from reportlab.lib.units import mm
 
-from netexpe.pdf.style.style import Style
-from netexpe.pdf.tools import ColorRGB
+from affinitic.pdf.style.style import Style
+from affinitic.pdf.tools import ColorRGB
 
 
 class StyleLibrary:

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created by mpeeters.
-Licensed under the GPL license, see LICENCE.txt for more details.
-Copyright by NetExpe sprl
+affinitic.pdf
+-------------
+
+Created by mpeeters
+:copyright: (c) 2015 by Affinitic SPRL
+:license: GPL, see LICENCE.txt for more details.
 """
 
 import unittest2
 
-from netexpe.pdf.style import Style, StyleLibrary
-from netexpe.pdf.tools import ColorRGB
+from affinitic.pdf.style import Style, StyleLibrary
+from affinitic.pdf.tools import ColorRGB
 
 
 class TestStyle(unittest2.TestCase):
@@ -214,7 +217,7 @@ class TestStyleLibrary(unittest2.TestCase):
 
     def test_base_style_property(self):
         """ Tests StyleLibrary._base_style """
-        from netexpe.pdf.tools import ColorRGB
+        from affinitic.pdf.tools import ColorRGB
 
         lib = StyleLibrary()
 
