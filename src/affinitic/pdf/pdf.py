@@ -36,7 +36,8 @@ class Pdf(object):
             topMargin=margins[0] * measure_unit - 2 * mm,
             rightMargin=margins[1] * measure_unit + 2 * mm,
             bottomMargin=margins[2] * measure_unit + 2 * mm,
-            leftMargin=margins[3] * measure_unit - 2 * mm)
+            leftMargin=margins[3] * measure_unit - 2 * mm,
+        )
         self._story = []
         self._currentElement = None
         self._styles = styles or StyleLibrary()
@@ -83,8 +84,12 @@ class Pdf(object):
     def add_paragraph(self, text, style='paragraph', width=None, height=None):
         """Add a new paragraph element"""
         self._verify_element()
-        self._currentElement.draw_parapraph(text, self._styles.get(style),
-                                            width=width, height=height)
+        self._currentElement.draw_parapraph(
+            text,
+            self._styles.get(style),
+            width=width,
+            height=height,
+        )
 
     def add_table(self):
         """Add a new table an returns the object"""
@@ -94,14 +99,21 @@ class Pdf(object):
     def add_h_line(self, color=ColorRGB(50, 50, 50)):
         """Add a horizontal line"""
         self._verify_element()
-        self._currentElement.draw_h_line(self._document.width / mm,
-                                         color=color)
+        self._currentElement.draw_h_line(
+            self._document.width / mm,
+            color=color,
+        )
 
-    def add_rectangle(self, width, height):
+    def add_rectangle(self, width, height, bg_color=ColorRGB(240, 240, 240)):
         """Add a rectangle"""
         self._verify_element()
         self._currentElement.draw_rectangle(
-            width, height, bg_color=ColorRGB(240, 240, 240), fill=1, stroke=0)
+            width,
+            height,
+            bg_color=bg_color,
+            fill=1,
+            stroke=0,
+        )
 
     def define_background(self, filepath):
         """Define a pdf file to be set as the background for each pages"""

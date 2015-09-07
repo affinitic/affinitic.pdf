@@ -93,13 +93,14 @@ class ExtendedFlowable(Flowable):
         if height < paragraph_height:
             self.cursor.move(y=(paragraph_height - height) / self.unit)
 
-    def _draw_rectangle(self,
-                        width,
-                        height,
-                        bg_color=ColorRGB(r=150, g=150, b=150),
-                        stroke_color=ColorRGB(r=200, g=200, b=200),
-                        fill=0,
-                        stroke=1):
+    def _draw_rectangle(
+            self,
+            width,
+            height,
+            bg_color=ColorRGB(r=150, g=150, b=150),
+            stroke_color=ColorRGB(r=200, g=200, b=200),
+            fill=0,
+            stroke=1):
         """Draw a rectangle"""
         self.canv.setStrokeColor(stroke_color.rgb)
         self.canv.setFillColor(bg_color.rgb)
@@ -109,10 +110,15 @@ class ExtendedFlowable(Flowable):
             width * self.unit,
             height * self.unit,
             fill=fill,
-            stroke=stroke)
+            stroke=stroke,
+        )
 
-    def _draw_grid(self, size, width, height,
-                   color=ColorRGB(r=150, g=150, b=150)):
+    def _draw_grid(
+            self,
+            size,
+            width,
+            height,
+            color=ColorRGB(r=150, g=150, b=150)):
         """Draw the grid"""
         self._draw_rectangle(width, height, stroke_color=color)
         for x in range(int(width) / size):
