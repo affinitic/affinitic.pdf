@@ -50,7 +50,9 @@ setup(
             'unittest2',
         ],
     ),
-    entry_points="""
-    # -*- Entry points: -*-
-    """,
+    entry_points={
+        'console_scripts': [
+            'example_basic = affinitic.pdf.examples.basic:main',
+        ],
+    },
 )
