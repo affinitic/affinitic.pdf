@@ -1,0 +1,9 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+install:
+  - python bootstrap.py -v 2.4.2 --setuptools-version=18.2
+  - bin/buildout -N -q -t 3
+script:
+  - bin/test
