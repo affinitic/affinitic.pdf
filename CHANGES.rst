@@ -4,5 +4,5 @@ Changelog
 0.1dev (unreleased)
 -------------------
 
-- Package created using zopeskel
-  []
+- Initial release
+  [mpeeters]
