@@ -8,7 +8,9 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
-from reportlab.lib.colors import CMYKColor, Color, rgb2cmyk
+from reportlab.lib.colors import CMYKColor
+from reportlab.lib.colors import Color
+from reportlab.lib.colors import rgb2cmyk
 
 
 class ColorRGB(object):

@@ -98,6 +98,11 @@ class TestStyleLibrary(unittest2.TestCase):
         # Inherited from base
         self.assertEquals('Helvetica', result.font_family)
 
+    def test_get_none_existing_style(self):
+        """Test StyleLibrary.get(self, stylename, inherits=None)"""
+        lib = StyleLibrary()
+        self.assertRaises(ValueError, lib.get, 'foo')
+
     def test_list(self):
         """Test StyleLibrary.list(self)"""
         lib = StyleLibrary()
