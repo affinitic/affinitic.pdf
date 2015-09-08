@@ -13,10 +13,11 @@ from affinitic.pdf.style import TableStyle
 
 class Table(object):
 
-    def __init__(self, pdf, style):
+    def __init__(self, pdf, id, style):
         self._columns = []
         self._rows = []
         self._pdf = pdf
+        self._id = id
         self.style = style
         if isinstance(self._pdf.get_style(self.style), TableStyle) is False:
             raise ValueError(u'The given style must be an instance of '
