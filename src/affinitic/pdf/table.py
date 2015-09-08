@@ -46,16 +46,38 @@ class Table(object):
         """Render the table"""
         for column in self._columns:
             for row in self._rows:
-                column_style = self._pdf._styles.get(column.style)
-                row_style = self._pdf._styles.get(row.style)
+                style = self._pdf.get_style(
+                    column.style,
+                    inherits=[row.style, self.style],
+                )
+                row_style = self._pdf.get_style(row.style)
+
+                self._generate_background(style)
                 self._pdf.add_paragraph(
                     getattr(row, column.name),
-                    width=column_style.width,
+                    width=style.width,
                     height=row_style.height,
-                    style=column.style)
-            self._pdf.cursor.move(x=column_style.width, y=self._height * - 1)
+                    style=style,
+                )
+            self._pdf.cursor.move(x=style.width, y=self._height * - 1)
         self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move(y=self._height)
+
+    def _generate_background(self, style):
+        if not style.border and not style.bg_color:
+            return
+        fill = style.background_color and 1 or 0
+        bg_color = style.background_color and style.background_color or None
+        stroke_color = style.border_color and style.border_color or None
+        stroke = style.border and style.border or 0
+        self._pdf.add_rectangle(
+            style.width,
+            style.height,
+            bg_color=bg_color,
+            stroke_color=stroke_color,
+            fill=fill,
+            stroke=stroke,
+        )
 
     @property
     def _height(self):
