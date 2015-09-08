@@ -38,8 +38,8 @@ class ExtendedFlowable(Flowable):
             method = getattr(self, element['name'])
             method(*element['args'], **element['kwargs'])
 
-    def drawOn(self, canvas, x, y, _sW=0):
-        Flowable.drawOn(self, canvas, x, y, _sW=_sW)
+    def drawOn(self, *args, **kwargs):
+        Flowable.drawOn(self, *args, **kwargs)
         # canvas.showPage()
 
     def _add_element(self, *args, **kwargs):

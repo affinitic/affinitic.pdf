@@ -23,25 +23,31 @@ from affinitic.pdf.tools import ColorRGB
 
 
 class Pdf(object):
+    _simulation_doc = None
 
     def __init__(self,
                  format=A4,
                  margins=[10, 10, 10, 10],
                  measure_unit=mm,
                  styles=None):
-        self._measure_unit = measure_unit
         self._io = StringIO()
-        self._document = SimpleDocTemplate(
-            self._io,
-            pagesize=format,
-            topMargin=margins[0] * measure_unit - 2 * mm,
-            rightMargin=margins[1] * measure_unit + 2 * mm,
-            bottomMargin=margins[2] * measure_unit + 2 * mm,
-            leftMargin=margins[3] * measure_unit - 2 * mm,
-        )
+        self._format = format
+        self._margins = margins
+        self._measure_unit = measure_unit
+        self._document = self._create_document(self._io)
         self._story = []
         self._currentElement = None
         self._styles = styles or StyleLibrary()
+
+    def _create_document(self, io):
+        return SimpleDocTemplate(
+            io,
+            pagesize=self._format,
+            topMargin=self._margins[0] * self._measure_unit - 2 * mm,
+            rightMargin=self._margins[1] * self._measure_unit + 2 * mm,
+            bottomMargin=self._margins[2] * self._measure_unit + 2 * mm,
+            leftMargin=self._margins[3] * self._measure_unit - 2 * mm,
+        )
 
     @property
     def width(self):
