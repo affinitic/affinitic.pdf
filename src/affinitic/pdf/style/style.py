@@ -47,6 +47,7 @@ class Style(object):
     }
 
     def __init__(self, **kwargs):
+        self._inherits = []
         for arg in kwargs:
             if arg not in self._accepted_attrs:
                 raise ValueError(
@@ -57,16 +58,27 @@ class Style(object):
         """Return a copy of the current object"""
         return copy.deepcopy(self)
 
-    def inherit(self, style):
+    def inherit(self, *styles):
+        """Inherits from multiple styles objects"""
+        for style in styles:
+            self._inherit(style)
+
+    def _inherit(self, style):
         """
         Update the current style by inheriting of the given style for the
         undefined properties
         """
+        self._inherits.append(style)
         for property_name in style.__dict__:
             if hasattr(self, property_name) is False or \
                hasattr(self, property_name) is True and \
                getattr(self, property_name) is None:
                 setattr(self, property_name, getattr(style, property_name))
+
+    def inherited_property(self, name):
+        """Return the inherited values for the given property name"""
+        return [getattr(i, name) for i in self._inherits
+                if hasattr(i, name)]
 
     def validate(self):
         """Verify if all the mandatory attributes are defined"""

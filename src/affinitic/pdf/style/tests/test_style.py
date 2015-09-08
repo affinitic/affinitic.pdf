@@ -60,11 +60,39 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals('right', style2.text_align)
 
     def test_inherit(self):
-        """Test Style.inherit(self, style)"""
+        """Test Style.inherit(self, *styles)"""
         style1 = Style(text_align='center')
         style2 = Style(text_align='right', font_size=10)
         style1.inherit(style2)
+        style3 = Style(text_align='center', font_size=12)
+        style1.inherit(style3)
 
+        self.assertEquals('center', style1.text_align)
+        self.assertEquals(10, style1.font_size)
+
+    def test_multiple_inherit(self):
+        """Test Style.inherit(self, *styles)"""
+        style1 = Style(text_align='center')
+        style2 = Style(text_align='right', font_size=10)
+        style3 = Style(height=50, font_size=12)
+        style4 = Style(width=100, height=100)
+        style1.inherit(style2, style3, style4)
+
+        self.assertEquals('center', style1.text_align)
+        self.assertEquals(10, style1.font_size)
+        self.assertEquals(50, style1.height)
+        self.assertEquals(100, style1.width)
+
+    def test_inherited_property(self):
+        """Test Style.inherited_property(self, name)"""
+        style1 = Style(text_align='center')
+        style2 = Style(text_align='right', font_size=10)
+        style3 = Style(text_align='center', font_size=12)
+        style1.inherit(style2, style3)
+
+        self.assertEquals(['right', 'center'],
+                          style1.inherited_property('text_align'))
+        self.assertEquals([10, 12], style1.inherited_property('font_size'))
         self.assertEquals('center', style1.text_align)
         self.assertEquals(10, style1.font_size)
 
