@@ -16,6 +16,7 @@ from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus.flowables import PageBreak
 
 from affinitic.pdf.flowable import ExtendedFlowable
+from affinitic.pdf.style import Style
 from affinitic.pdf.style import StyleLibrary
 from affinitic.pdf.table import Table
 from affinitic.pdf.tools import ColorRGB
@@ -77,16 +78,22 @@ class Pdf(object):
         element.draw_grid(size, width, height, color)
         self._story.insert(0, element)
 
-    def add_style(self, stylename, style):
+    def add_style(self, stylename, style, inherits=None):
         """Add a new style"""
-        self._styles.define(stylename, style)
+        self._styles.define(stylename, style, inherits=None)
+
+    def get_style(self, style, inherits=None):
+        """Return the style for the given style name"""
+        if isinstance(style, Style):
+            return style
+        return self._styles.get(style, inherits=inherits)
 
     def add_paragraph(self, text, style='paragraph', width=None, height=None):
         """Add a new paragraph element"""
         self._verify_element()
         self._currentElement.draw_parapraph(
             text,
-            self._styles.get(style),
+            self.get_style(style),
             width=width,
             height=height,
         )
