@@ -23,7 +23,7 @@ class BasicPdf(object):
     def styles(self):
         base_style = Style(color=ColorRGB(50, 50, 50), text_align='justify')
         library = StyleLibrary(base_style=base_style)
-        library.add('title', Style(width=178, text_indent=2, font_size=18))
+        library.add('title', Style(text_indent=2, font_size=18))
         library.add('red', Style(color=ColorRGB(255, 0, 0)))
         return library
 
