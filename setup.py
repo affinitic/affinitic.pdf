@@ -53,6 +53,7 @@ setup(
     entry_points={
         'console_scripts': [
             'example_basic = affinitic.pdf.examples.basic:main',
+            'example_table = affinitic.pdf.examples.table:main',
         ],
     },
 )
