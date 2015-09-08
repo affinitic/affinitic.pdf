@@ -97,13 +97,15 @@ class ExtendedFlowable(Flowable):
             self,
             width,
             height,
-            bg_color=ColorRGB(r=150, g=150, b=150),
-            stroke_color=ColorRGB(r=200, g=200, b=200),
+            bg_color=None,
+            stroke_color=None,
             fill=0,
-            stroke=1):
+            stroke=0):
         """Draw a rectangle"""
-        self.canv.setStrokeColor(stroke_color.rgb)
-        self.canv.setFillColor(bg_color.rgb)
+        if stroke:
+            self.canv.setStrokeColor(stroke_color.rgb)
+        if fill:
+            self.canv.setFillColor(bg_color.rgb)
         self.canv.rect(
             self.cursor.x * self.unit,
             self.cursor.y * self.unit - height * self.unit,

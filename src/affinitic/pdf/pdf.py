@@ -104,15 +104,23 @@ class Pdf(object):
             color=color,
         )
 
-    def add_rectangle(self, width, height, bg_color=ColorRGB(240, 240, 240)):
+    def add_rectangle(
+            self,
+            width,
+            height,
+            bg_color=ColorRGB(240, 240, 240),
+            stroke_color=ColorRGB(150, 150, 150),
+            fill=1,
+            stroke=0):
         """Add a rectangle"""
         self._verify_element()
         self._currentElement.draw_rectangle(
             width,
             height,
             bg_color=bg_color,
-            fill=1,
-            stroke=0,
+            stroke_color=stroke_color,
+            fill=fill,
+            stroke=stroke,
         )
 
     def define_background(self, filepath):
