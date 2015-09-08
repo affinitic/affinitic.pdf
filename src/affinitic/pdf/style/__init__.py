@@ -10,5 +10,10 @@ Created by mpeeters
 
 from affinitic.pdf.style.library import StyleLibrary
 from affinitic.pdf.style.style import Style
+from affinitic.pdf.style.style import TableStyle
 
-__all__ = [Style.__name__, StyleLibrary.__name__]
+__all__ = (
+    Style.__name__,
+    StyleLibrary.__name__,
+    TableStyle.__name__,
+)

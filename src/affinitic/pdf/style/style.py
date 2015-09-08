@@ -138,3 +138,13 @@ class Style(object):
     def _color(self):
         """Return the CYMK color for the color attribute"""
         return self.color.cmyk
+
+
+class TableStyle(Style):
+    _accepted_attrs = Style._accepted_attrs + (
+        'border',
+    )
+    _mandatory_attrs = Style._accepted_attrs + (
+        'border',
+        'border_color',
+    )

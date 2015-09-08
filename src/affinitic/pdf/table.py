@@ -8,13 +8,19 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+from affinitic.pdf.style import TableStyle
+
 
 class Table(object):
 
-    def __init__(self, pdf):
+    def __init__(self, pdf, style):
         self._columns = []
         self._rows = []
         self._pdf = pdf
+        self.style = style
+        if isinstance(self._pdf.get_style(self.style), TableStyle) is False:
+            raise ValueError(u'The given style must be an instance of '
+                             u'TableStyle class')
 
     def add_column(self, title=None, format=None, style=None):
         """Add a new column to the table"""

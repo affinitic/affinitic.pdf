@@ -98,10 +98,10 @@ class Pdf(object):
             height=height,
         )
 
-    def add_table(self):
+    def add_table(self, style=None):
         """Add a new table an returns the object"""
         self._verify_element()
-        return Table(self)
+        return Table(self, self.get_style(style).name)
 
     def add_h_line(self, color=ColorRGB(50, 50, 50)):
         """Add a horizontal line"""
