@@ -7,3 +7,5 @@ install:
   - bin/buildout -N -q -t 3
 script:
   - bin/test
+  - bin/example_basic
+  - bin/example_table
