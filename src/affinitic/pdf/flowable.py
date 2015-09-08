@@ -155,3 +155,29 @@ class ExtendedFlowable(Flowable):
     draw_grid = _add_element
     draw_h_line = _add_element
     draw_v_line = _add_element
+
+
+class SimulationFlowable(ExtendedFlowable):
+
+    def __init__(self, measure_unit, document):
+        Flowable.__init__(self)
+        self.unit = measure_unit
+        self.cursor = Cursor()
+        self._elements = []
+        self.canv = document.canv
+        self._frame = document.pageTemplate.frames[0]
+
+    def draw(self):
+        return
+
+    def drawOn(self, *args, **kwargs):
+        return
+
+    def paragraph_size(self, text, style, **kwargs):
+        """Return the simulated paragraph final size"""
+        paragraph_style = style.paragraph_style
+        paragraph_width, paragraph_height = self._get_paragraph_size(**kwargs)
+        paragraph = Paragraph(text, paragraph_style)
+        width, height = paragraph.wrapOn(
+            self.canv, paragraph_width, paragraph_height)
+        return width / self.unit, height / self.unit

@@ -16,6 +16,7 @@ from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus.flowables import PageBreak
 
 from affinitic.pdf.flowable import ExtendedFlowable
+from affinitic.pdf.flowable import SimulationFlowable
 from affinitic.pdf.style import Style
 from affinitic.pdf.style import StyleLibrary
 from affinitic.pdf.table import Table
@@ -48,6 +49,12 @@ class Pdf(object):
             bottomMargin=self._margins[2] * self._measure_unit + 2 * mm,
             leftMargin=self._margins[3] * self._measure_unit - 2 * mm,
         )
+
+    def _get_simulation_document(self):
+        if not self._simulation_doc:
+            self._simulation_doc = self._create_document(StringIO())
+            self._simulation_doc.build([])
+        return self._simulation_doc
 
     @property
     def width(self):
