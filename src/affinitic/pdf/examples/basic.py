@@ -51,4 +51,4 @@ Fusce ornare erat sit amet augue volutpat, nec porttitor metus venenatis. Fusce 
 def main():
     pdf = BasicPdf()
     pdf.create_pdf()
-    return 'The file basic.pdf was generated'
+    print 'The file basic.pdf was generated'

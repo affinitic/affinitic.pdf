@@ -78,4 +78,4 @@ class TablePdf(object):
 def main():
     pdf = TablePdf()
     pdf.create_pdf()
-    return 'The file table.pdf was generated'
+    print 'The file table.pdf was generated'
