@@ -54,6 +54,10 @@ class StyleLibrary(object):
             style.inherit(self._styles[inherited_style])
         return style
 
+    def has_style(self, stylename):
+        """Verify if the given stylename exist in the library"""
+        return stylename in self._styles
+
     def list(self):
         """Return a list with all the styles names"""
         return self._styles.keys()
