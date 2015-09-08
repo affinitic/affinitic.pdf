@@ -111,7 +111,23 @@ class Pdf(object):
             height=height,
         )
 
-    def add_table(self, style=None):
+    def simulate_paragraph_size(
+            self,
+            text,
+            style='paragraph',
+            width=None,
+            height=None):
+        """Return the simulated paragraph size"""
+        document = self._get_simulation_document()
+        element = SimulationFlowable(self._measure_unit, document)
+        return element.paragraph_size(
+            text,
+            self.get_style(style),
+            width=width,
+            height=height,
+        )
+
+    def add_table(self, id, style=None):
         """Add a new table an returns the object"""
         self._verify_element()
         return Table(self, id, self.get_style(style).name)

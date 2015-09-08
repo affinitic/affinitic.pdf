@@ -8,6 +8,7 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+from affinitic.pdf.style import Style
 from affinitic.pdf.style import TableStyle
 
 
@@ -45,13 +46,11 @@ class Table(object):
 
     def render(self):
         """Render the table"""
-        for column in self._columns:
-            for row in self._rows:
-                style = self._pdf.get_style(
-                    column.style,
-                    inherits=[row.style, self.style],
-                )
-                row_style = self._pdf.get_style(row.style)
+        self.simulate()
+        for c_idx, column in enumerate(self._columns):
+            for r_idx, row in enumerate(self._rows):
+                style = self._get_cell_style(c_idx, column, r_idx, row)
+                row_style = self._get_row_style(r_idx, row)
 
                 self._generate_background(style)
                 self._pdf.add_paragraph(
@@ -63,6 +62,57 @@ class Table(object):
             self._pdf.cursor.move(x=style.width, y=self._height * - 1)
         self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move(y=self._height)
+
+    def _get_cell_style(self, c_idx, column, r_idx, row):
+        c_name = 'table-%s-col-%s' % (self._id, c_idx)
+        r_name = 'table-%s-row-%s' % (self._id, r_idx)
+        chain = []
+        if self._pdf._styles.has_style(c_name):
+            chain.append(c_name)
+        chain.append(column.style)
+        if self._pdf._styles.has_style(r_name):
+            chain.append(r_name)
+        chain.append(row.style)
+        chain.append(self.style)
+        return self._get_chain_style(chain)
+
+    def _get_row_style(self, r_idx, row):
+        r_name = 'table-%s-row-%s' % (self._id, r_idx)
+        chain = []
+        if self._pdf._styles.has_style(r_name):
+            chain.append(r_name)
+        chain.append(row.style)
+        return self._get_chain_style(chain)
+
+    def _get_chain_style(self, chain):
+        return self._pdf.get_style(
+            chain[0],
+            inherits=chain[1:],
+        )
+
+    def simulate(self):
+        """Simulate the table render to handle overflow"""
+        for c_idx, column in enumerate(self._columns):
+            for r_idx, row in enumerate(self._rows):
+                style = self._pdf.get_style(
+                    column.style,
+                    inherits=[row.style, self.style],
+                )
+                row_style = self._pdf.get_style(row.style)
+                width, height = self._pdf.simulate_paragraph_size(
+                    getattr(row, column.name),
+                    width=style.width,
+                    height=row_style.height,
+                    style=style,
+                )
+                if width > style.width:
+                    col_style = Style(width=width)
+                    style_id = 'table-%s-col-%s' % (self._id, c_idx)
+                    self._pdf._styles.define(style_id, col_style)
+                if height > row_style.height:
+                    row_style = Style(height=height)
+                    style_id = 'table-%s-row-%s' % (self._id, r_idx)
+                    self._pdf._styles.define(style_id, row_style)
 
     def _generate_background(self, style):
         if not style.border and not style.bg_color:
@@ -84,8 +134,8 @@ class Table(object):
     def _height(self):
         """Returns the table height"""
         height = 0
-        for row in self._rows:
-            height += self._pdf._styles.get(row.style).height
+        for r_idx, row in enumerate(self._rows):
+            height += self._get_row_style(r_idx, row).height
         return height
 
 

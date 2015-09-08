@@ -63,23 +63,9 @@ class ExtendedFlowable(Flowable):
     def _draw_paragraph(self, text, style, **kwargs):
         """Draw a paragraph"""
         paragraph_style = style.paragraph_style
-        if 'width' not in kwargs.keys() or kwargs['width'] is None:
-            paragraph_width = self._frame.width - (self.cursor.x * self.unit)
-        else:
-            paragraph_width = kwargs['width'] * self.unit
-
-        if 'height' not in kwargs.keys() or kwargs['height'] is None:
-            paragraph_height = 0
-        else:
-            paragraph_height = kwargs['height'] * self.unit
+        paragraph_width, paragraph_height = self._get_paragraph_size(**kwargs)
 
         canvas = self.canv
-        # DEBUG
-        # from reportlab.lib.colors import black
-        # paragraph_style.borderWidth = 1
-        # paragraph_style.borderColor = black
-        # DEBUG
-
         paragraph = Paragraph(text, paragraph_style)
         width, height = paragraph.wrapOn(
             self.canv, paragraph_width, paragraph_height)
@@ -92,6 +78,20 @@ class ExtendedFlowable(Flowable):
         self.cursor.move(y=height / self.unit)
         if height < paragraph_height:
             self.cursor.move(y=(paragraph_height - height) / self.unit)
+
+    def _get_paragraph_size(self, **kwargs):
+        """Return the paragraph width and height"""
+        if 'width' not in kwargs.keys() or kwargs['width'] is None:
+            paragraph_width = self._frame.width - (self.cursor.x * self.unit)
+        else:
+            paragraph_width = kwargs['width'] * self.unit
+
+        if 'height' not in kwargs.keys() or kwargs['height'] is None:
+            paragraph_height = 0
+        else:
+            paragraph_height = kwargs['height'] * self.unit
+
+        return paragraph_width, paragraph_height
 
     def _draw_rectangle(
             self,
