@@ -17,3 +17,5 @@ lib/
 local/
 htmlcov/
 coverage/
+basic.pdf
+table.pdf
