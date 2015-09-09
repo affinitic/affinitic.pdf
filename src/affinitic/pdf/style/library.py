@@ -19,8 +19,7 @@ class StyleLibrary(object):
     def __init__(self, base_style=None, unit=mm):
         self._styles = {}
         self._unit = unit
-        if base_style is not None and base_style.validate() is False:
-            base_style.inherit(self._base_style)
+        base_style.inherit(self._base_style)
 
         self.define('base', base_style or self._base_style)
         self._defines_base_styles()
@@ -33,6 +32,7 @@ class StyleLibrary(object):
         inherits = inherits or []
         for inherit in inherits:
             style.inherit(self._styles.get(inherit))
+        style.validate()
         self._styles[stylename] = style
 
     def get(self, stylename, inherits=None):

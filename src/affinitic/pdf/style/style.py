@@ -29,12 +29,6 @@ class Style(object):
         'line_height',
     )
     _mandatory_attrs = (
-        'color',
-        'text_align',
-        'text_indent',
-        'font_family',
-        'font_size',
-        'font_style',
     )
     _paragraph_styles_match = {
         '_color': 'textColor',
@@ -84,8 +78,8 @@ class Style(object):
         """Verify if all the mandatory attributes are defined"""
         for attr in self._mandatory_attrs:
             if hasattr(self, attr) is False or getattr(self, attr) is None:
-                return False
-        return True
+                raise ValueError("The attribute '%s' is mandatory on '%s'"
+                                 % (attr, self.__class__))
 
     @property
     def paragraph_style(self):
@@ -144,7 +138,7 @@ class TableStyle(Style):
     _accepted_attrs = Style._accepted_attrs + (
         'border',
     )
-    _mandatory_attrs = Style._accepted_attrs + (
+    _mandatory_attrs = Style._mandatory_attrs + (
         'border',
         'border_color',
     )
