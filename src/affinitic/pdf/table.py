@@ -8,6 +8,8 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+from affinitic.pdf.style import ColumnStyle
+from affinitic.pdf.style import RowStyle
 from affinitic.pdf.style import Style
 from affinitic.pdf.style import TableStyle
 
@@ -21,11 +23,14 @@ class Table(object):
         self._id = id
         self.style = style
         if isinstance(self._pdf.get_style(self.style), TableStyle) is False:
-            raise ValueError(u'The given style must be an instance of '
+            raise ValueError(u'The given table style must be an instance of '
                              u'TableStyle class')
 
     def add_column(self, title=None, format=None, style=None):
         """Add a new column to the table"""
+        if style and isinstance(self._pdf.get_style(style), ColumnStyle) is False:
+            raise ValueError(u'The given column style must be an instance of '
+                             u'ColumnStyle class')
         self._columns.append(Column(
             'column-%s' % len(self._columns),
             title=title,
@@ -35,6 +40,9 @@ class Table(object):
 
     def add_row(self, content, title=None, style=None):
         """Add a new row to the table"""
+        if style and isinstance(self._pdf.get_style(style), RowStyle) is False:
+            raise ValueError(u'The given column style must be an instance of '
+                             u'RowStyle class')
         content_dict = {}
         if len(content) != len(self._columns):
             raise ValueError("The number of content (%s) doesn't match to the "

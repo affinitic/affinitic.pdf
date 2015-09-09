@@ -142,3 +142,20 @@ class TableStyle(Style):
         'border',
         'border_color',
     )
+
+
+class ColumnStyle(Style):
+    _mandatory_attrs = Style._mandatory_attrs + (
+        'width',
+    )
+
+
+class RowStyle(Style):
+    _accepted_attrs = Style._accepted_attrs + (
+        'border',
+    )
+    _mandatory_attrs = Style._mandatory_attrs + (
+        'border',
+        'border_color',
+        'height',
+    )

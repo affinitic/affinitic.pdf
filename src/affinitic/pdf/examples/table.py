@@ -9,6 +9,8 @@ Created by mpeeters
 """
 
 from affinitic.pdf.pdf import Pdf
+from affinitic.pdf.style import ColumnStyle
+from affinitic.pdf.style import RowStyle
 from affinitic.pdf.style import TableStyle
 from affinitic.pdf.style import Style
 from affinitic.pdf.style import StyleLibrary
@@ -24,9 +26,9 @@ class TablePdf(object):
     def styles(self):
         base_style = Style(color=ColorRGB(50, 50, 50), text_align='left')
         library = StyleLibrary(base_style=base_style)
-        library.add('col1', Style(width=10))
-        library.add('col2', Style(width=50))
-        library.add('col3', Style(width=30))
+        library.add('col1', ColumnStyle(width=10))
+        library.add('col2', ColumnStyle(width=50))
+        library.add('col3', ColumnStyle(width=30))
         library.add(
             'table',
             TableStyle(
@@ -37,17 +39,18 @@ class TablePdf(object):
         )
         library.add(
             'header',
-            Style(
+            RowStyle(
                 height=7,
                 font_size=10,
                 background_color=ColorRGB(50, 50, 50),
                 color=ColorRGB(255, 255, 255),
             ),
+            inherits=['table'],
         )
-        library.add('odd', Style(height=5))
+        library.add('odd', RowStyle(height=5), inherits=['table'])
         library.add(
             'even',
-            Style(background_color=ColorRGB(190, 190, 190)),
+            RowStyle(background_color=ColorRGB(190, 190, 190)),
             inherits=['odd'],
         )
         return library
