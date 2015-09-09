@@ -19,13 +19,18 @@ from affinitic.pdf.style import StyleLibrary
 
 class TestStyleLibrary(unittest2.TestCase):
 
+    @property
+    def _default_styles(self):
+        return ['base', 'paragraph', 'table']
+
     def test_init_without_base(self):
         """Test StyleLibrary.__init__(self, base_style=None, unit=mm)"""
         lib = StyleLibrary()
 
         self.assertEquals(mm, lib._unit)
-        self.assertEqual(['base', 'paragraph'], lib._styles.keys())
-        self.assertEquals('base', lib._styles.keys()[0])
+        self.assertEqual(sorted(self._default_styles),
+                         sorted(lib._styles.keys()))
+        self.assertTrue('base' in lib._styles.keys())
         self.assertEquals(9, lib._styles['base'].font_size)
 
     def test_init_with_base(self):
@@ -35,18 +40,21 @@ class TestStyleLibrary(unittest2.TestCase):
 
         lib = StyleLibrary(base_style=base)
 
-        self.assertEqual(['base', 'paragraph'], lib._styles.keys())
-        self.assertEquals('base', lib._styles.keys()[0])
+        self.assertEqual(sorted(self._default_styles),
+                         sorted(lib._styles.keys()))
+        self.assertTrue('base' in lib._styles.keys())
         self.assertEquals(12, lib._styles['base'].font_size)
         self.assertEquals(0, lib._styles['base'].text_indent)
 
     def test_define(self):
-        """Test StyleLibrary.define(self, stylename, style)"""
+        """Test StyleLibrary.define(self, stylename, style, inherits=None)"""
         style = Style(font_size=10, text_indent=1)
         lib = StyleLibrary()
         lib.define('test', style)
 
-        self.assertEquals(sorted(['base', 'paragraph', 'test']),
+        styles = self._default_styles
+        styles.append('test')
+        self.assertEquals(sorted(styles),
                           sorted(lib._styles.keys()))
         self.assertEquals(mm, lib._styles['test'].text_indent)
 

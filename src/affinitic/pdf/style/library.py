@@ -11,6 +11,7 @@ Created by mpeeters
 from reportlab.lib.units import mm
 
 from affinitic.pdf.style.style import Style
+from affinitic.pdf.style.style import TableStyle
 from affinitic.pdf.tools import ColorRGB
 
 
@@ -30,9 +31,11 @@ class StyleLibrary(object):
         style.name = stylename
         if hasattr(style, 'text_indent') is True:
             style.text_indent *= self._unit
-        inherits = inherits or []
-        for inherit in inherits:
-            style.inherit(self._styles.get(inherit))
+        if inherits is not False:
+            inherits = inherits or []
+            inherits.extend(self._auto_inheritance(style))
+            for inherit in inherits:
+                style.inherit(self._styles.get(inherit))
         style.validate()
         self._styles[stylename] = style
 
@@ -78,10 +81,31 @@ class StyleLibrary(object):
             border_color=None,
             width=None,
             height=None,
-            line_height=None)
+            line_height=None,
+            padding='0',
+        )
 
     def _defines_base_styles(self):
         """Create and return a bunch of basic styles"""
-        self.define('paragraph', Style())
+        self.define('paragraph', Style(), inherits=False)
+        self.define(
+            'table',
+            TableStyle(
+                border=1,
+                border_color=ColorRGB(0, 0, 0),
+            ),
+            inherits=False,
+        )
+
+    def _auto_inheritance(self, style):
+        """Enable the automatic inheritance for some style classes"""
+        inherits_cls = {
+            TableStyle: 'table',
+        }
+        inherits = []
+        for cls, stylename in inherits_cls.items():
+            if isinstance(style, cls):
+                inherits.append(stylename)
+        return inherits
 
     add = define  # Alias for the define method
