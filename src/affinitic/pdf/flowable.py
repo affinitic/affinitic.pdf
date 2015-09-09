@@ -63,23 +63,24 @@ class ExtendedFlowable(Flowable):
     def _draw_paragraph(self, text, style, **kwargs):
         """Draw a paragraph"""
         paragraph_style = style.paragraph_style
-        paragraph_width, paragraph_height = self._get_paragraph_size(**kwargs)
+        p_width, p_height = self._get_paragraph_size(style, **kwargs)
 
         canvas = self.canv
         paragraph = Paragraph(text, paragraph_style)
         width, height = paragraph.wrapOn(
-            self.canv, paragraph_width, paragraph_height)
+            self.canv, p_width, p_height)
 
         paragraph.drawOn(
             canvas,
             self.cursor.x * self.unit,
-            self.cursor.y * self.unit - height)
+            (self.cursor.y - style.padding_top) * self.unit - height,
+        )
 
-        self.cursor.move(y=height / self.unit)
-        if height < paragraph_height:
-            self.cursor.move(y=(paragraph_height - height) / self.unit)
+        self.cursor.move(y=height / self.unit + style.padding_v)
+        if height < p_height:
+            self.cursor.move(y=(p_height - height) / self.unit)
 
-    def _get_paragraph_size(self, **kwargs):
+    def _get_paragraph_size(self, style, **kwargs):
         """Return the paragraph width and height"""
         if 'width' not in kwargs.keys() or kwargs['width'] is None:
             paragraph_width = self._frame.width - (self.cursor.x * self.unit)
@@ -176,8 +177,10 @@ class SimulationFlowable(ExtendedFlowable):
     def paragraph_size(self, text, style, **kwargs):
         """Return the simulated paragraph final size"""
         paragraph_style = style.paragraph_style
-        paragraph_width, paragraph_height = self._get_paragraph_size(**kwargs)
+        p_width, p_height = self._get_paragraph_size(style, **kwargs)
         paragraph = Paragraph(text, paragraph_style)
-        width, height = paragraph.wrapOn(
-            self.canv, paragraph_width, paragraph_height)
-        return width / self.unit, height / self.unit
+        width, height = paragraph.wrapOn(self.canv, p_width, p_height)
+        return (
+            width / self.unit,
+            height / self.unit,
+        )

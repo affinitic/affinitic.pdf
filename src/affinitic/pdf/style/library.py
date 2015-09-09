@@ -29,8 +29,7 @@ class StyleLibrary(object):
     def define(self, stylename, style, inherits=None):
         """Add a new style"""
         style.name = stylename
-        if hasattr(style, 'text_indent') is True:
-            style.text_indent *= self._unit
+        style.unit = self._unit
         if inherits is not False:
             inherits = inherits or []
             inherits.extend(self._auto_inheritance(style))

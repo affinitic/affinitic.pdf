@@ -26,6 +26,10 @@ class Table(object):
             raise ValueError(u'The given table style must be an instance of '
                              u'TableStyle class')
 
+    @property
+    def unit(self):
+        return self._pdf._measure_unit
+
     def add_column(self, title=None, format=None, style=None):
         """Add a new column to the table"""
         if style and isinstance(self._pdf.get_style(style), ColumnStyle) is False:
@@ -67,7 +71,10 @@ class Table(object):
                     height=row_style.height,
                     style=style,
                 )
-            self._pdf.cursor.move(x=style.width, y=self._height * - 1)
+            self._pdf.cursor.move(
+                x=style.width,
+                y=self._height * - 1,
+            )
         self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move(y=self._height)
 
@@ -113,8 +120,9 @@ class Table(object):
                     height=row_style.height,
                     style=style,
                 )
+
                 if width > style.width:
-                    col_style = Style(width=width)
+                    col_style = Style(width=width + style.padding_h)
                     style_id = 'table-%s-col-%s' % (self._id, c_idx)
                     self._pdf._styles.define(style_id, col_style)
                 if height > row_style.height:
@@ -131,7 +139,7 @@ class Table(object):
         stroke = style.border and style.border or 0
         self._pdf.add_rectangle(
             style.width,
-            style.height,
+            style.height + style.padding_v,
             bg_color=bg_color,
             stroke_color=stroke_color,
             fill=fill,
@@ -143,7 +151,8 @@ class Table(object):
         """Returns the table height"""
         height = 0
         for r_idx, row in enumerate(self._rows):
-            height += self._get_row_style(r_idx, row).height
+            style = self._get_row_style(r_idx, row)
+            height += style.height + style.padding_v
         return height
 
 

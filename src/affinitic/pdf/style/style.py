@@ -34,7 +34,8 @@ class Style(object):
     _paragraph_styles_match = {
         '_color': 'textColor',
         '_text_align': 'alignment',
-        'text_indent': 'leftIndent',
+        '_left_indent': 'leftIndent',
+        '_right_indent': 'rightIndent',
         '_text_transform': 'textTransform',
         'font_family': 'fontName',
         'font_size': 'fontSize',
@@ -135,6 +136,14 @@ class Style(object):
         return self.color.cmyk
 
     @property
+    def _left_indent(self):
+        return (self.text_indent + self.padding_left) * self.unit
+
+    @property
+    def _right_indent(self):
+        return self.padding_right * self.unit
+
+    @property
     def padding_top(self):
         return self._parse_padding().get('top')
 
@@ -149,6 +158,14 @@ class Style(object):
     @property
     def padding_left(self):
         return self._parse_padding().get('left')
+
+    @property
+    def padding_h(self):
+        return self.padding_left + self.padding_right
+
+    @property
+    def padding_v(self):
+        return self.padding_top + self.padding_bottom
 
     def _parse_padding(self):
         paddings = self.padding.split(' ')
