@@ -27,6 +27,7 @@ class Style(object):
         'width',
         'height',
         'line_height',
+        'padding',
     )
     _mandatory_attrs = (
     )
@@ -132,6 +133,52 @@ class Style(object):
     def _color(self):
         """Return the CYMK color for the color attribute"""
         return self.color.cmyk
+
+    @property
+    def padding_top(self):
+        return self._parse_padding().get('top')
+
+    @property
+    def padding_right(self):
+        return self._parse_padding().get('right')
+
+    @property
+    def padding_bottom(self):
+        return self._parse_padding().get('bottom')
+
+    @property
+    def padding_left(self):
+        return self._parse_padding().get('left')
+
+    def _parse_padding(self):
+        paddings = self.padding.split(' ')
+        if len(paddings) == 1:
+            value = paddings[0]
+            paddings = [value, value, value, value]
+        elif len(paddings) == 2:
+            top_bottom = paddings[0]
+            left_right = paddings[1]
+            paddings = [top_bottom, left_right, top_bottom, left_right]
+        elif len(paddings) == 3:
+            top = paddings[0]
+            left_right = paddings[1]
+            bottom = paddings[2]
+            paddings = [top, left_right, bottom, left_right]
+        if len(paddings) == 4:
+            paddings = [
+                paddings[0],
+                paddings[1],
+                paddings[2],
+                paddings[3],
+            ]
+        else:
+            raise ValueError("Invalid padding '%s'" % self.padding)
+        return {
+            'top': float(paddings[0]),
+            'right': float(paddings[1]),
+            'bottom': float(paddings[2]),
+            'left': float(paddings[3]),
+        }
 
 
 class TableStyle(Style):

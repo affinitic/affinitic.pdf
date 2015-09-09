@@ -172,3 +172,60 @@ class TestStyle(unittest2.TestCase):
         self.assertEquals(0, style._color.green)
         self.assertEquals(0, style._color.yellow)
         self.assertEquals(1, style._color.black)
+
+    def test_padding_properties(self):
+        """Test Style.padding_* properties"""
+        style = Style(padding='1')
+        self.assertEqual(1.0, style.padding_top)
+        self.assertEqual(1.0, style.padding_right)
+        self.assertEqual(1.0, style.padding_left)
+        self.assertEqual(1.0, style.padding_bottom)
+
+    def test_parse_padding_single_value(self):
+        """Test Style._parse_padding(self)"""
+        style = Style(padding='1')
+        values = {
+            'top': 1.0,
+            'right': 1.0,
+            'bottom': 1.0,
+            'left': 1.0,
+        }
+        self.assertEqual(values, style._parse_padding())
+
+    def test_parse_padding_two_values(self):
+        """Test Style._parse_padding(self)"""
+        style = Style(padding='1 2')
+        values = {
+            'top': 1.0,
+            'right': 2.0,
+            'bottom': 1.0,
+            'left': 2.0,
+        }
+        self.assertEqual(values, style._parse_padding())
+
+    def test_parse_padding_three_values(self):
+        """Test Style._parse_padding(self)"""
+        style = Style(padding='1 2 3')
+        values = {
+            'top': 1.0,
+            'right': 2.0,
+            'bottom': 3.0,
+            'left': 2.0,
+        }
+        self.assertEqual(values, style._parse_padding())
+
+    def test_parse_padding_four_values(self):
+        """Test Style._parse_padding(self)"""
+        style = Style(padding='1 2 3 4')
+        values = {
+            'top': 1.0,
+            'right': 2.0,
+            'bottom': 3.0,
+            'left': 4.0,
+        }
+        self.assertEqual(values, style._parse_padding())
+
+    def test_parse_padding_wrong_value(self):
+        """Test Style._parse_padding(self)"""
+        style = Style(padding='1 2 3 4 5')
+        self.assertRaises(ValueError, style._parse_padding)
