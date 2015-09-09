@@ -155,7 +155,5 @@ class RowStyle(Style):
         'border',
     )
     _mandatory_attrs = Style._mandatory_attrs + (
-        'border',
-        'border_color',
         'height',
     )

@@ -13,6 +13,9 @@ from reportlab.lib.colors import CMYKColor
 import unittest2
 
 from affinitic.pdf.style import Style
+from affinitic.pdf.style import TableStyle
+from affinitic.pdf.style import RowStyle
+from affinitic.pdf.style import ColumnStyle
 from affinitic.pdf.tools import ColorRGB
 
 
@@ -34,6 +37,14 @@ class TestStyle(unittest2.TestCase):
             width=None,
             height=None,
             line_height=None)
+
+    def _test_style_validation(self, cls, **kwargs):
+        """Test style class validation"""
+        style = cls()
+        for key, value in kwargs.items():
+            self.assertRaises(ValueError, style.validate)
+            setattr(style, key, value)
+        self.assertIsNone(style.validate())
 
     def test_init_accepted_arguments(self):
         """
@@ -98,11 +109,23 @@ class TestStyle(unittest2.TestCase):
 
     def test_validate(self):
         """Test Style.validate(self)"""
-        style1 = self._base_style.copy()
-        style1.color = None
+        self._test_style_validation(Style)
 
-        self.assertEquals(False, style1.validate())
-        self.assertEquals(True, self._base_style.validate())
+    def test_TableStyle_validation(self):
+        """Test TableStyle.validate(self)"""
+        self._test_style_validation(
+            TableStyle,
+            border=1,
+            border_color=ColorRGB(1, 1, 1),
+        )
+
+    def test_ColumnStyle_validation(self):
+        """Test ColumnStyle.validate(self)"""
+        self._test_style_validation(ColumnStyle, width=10)
+
+    def test_RowStyle_validation(self):
+        """Test RowStyle.validate(self)"""
+        self._test_style_validation(RowStyle, height=10)
 
     def test_paragraph_style_property_known_value(self):
         """Test Style.paragraph_style"""
