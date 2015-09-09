@@ -19,7 +19,8 @@ class StyleLibrary(object):
     def __init__(self, base_style=None, unit=mm):
         self._styles = {}
         self._unit = unit
-        base_style.inherit(self._base_style)
+        if base_style:
+            base_style.inherit(self._base_style)
 
         self.define('base', base_style or self._base_style)
         self._defines_base_styles()
