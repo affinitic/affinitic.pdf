@@ -56,7 +56,9 @@ class TestStyleLibrary(unittest2.TestCase):
         styles.append('test')
         self.assertEquals(sorted(styles),
                           sorted(lib._styles.keys()))
-        self.assertEquals(mm, lib._styles['test'].text_indent)
+        test_style = lib.get('test')
+        self.assertEquals(1, test_style.text_indent)
+        self.assertEquals(mm, test_style._left_indent)
 
     def test_get_no_inherits(self):
         """Test StyleLibrary.get(self, stylename, inherits=None)"""

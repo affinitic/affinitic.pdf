@@ -9,6 +9,7 @@ Created by mpeeters
 """
 
 from reportlab.lib.colors import CMYKColor
+from reportlab.lib.units import mm
 
 import unittest2
 
@@ -24,7 +25,7 @@ class TestStyle(unittest2.TestCase):
     @property
     def _base_style(self):
         """Create and return a basic style where all attributes are defined"""
-        return Style(
+        style = Style(
             color=ColorRGB(0, 0, 0),
             text_align='left',
             text_indent=0,
@@ -36,7 +37,12 @@ class TestStyle(unittest2.TestCase):
             border_color=None,
             width=None,
             height=None,
-            line_height=None)
+            line_height=None,
+            padding='0',
+        )
+        style.name = 'base'
+        style.unit = mm
+        return style
 
     def _test_style_validation(self, cls, **kwargs):
         """Test style class validation"""
