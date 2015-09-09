@@ -17,14 +17,14 @@ from affinitic.pdf.tools import ColorRGB
 class BasicPdf(object):
 
     def __init__(self):
-        self.pdf = Pdf(margins=[45, 15, 22, 15], styles=self.styles)
+        self.pdf = Pdf(margins=[15, 15, 15, 15], styles=self.styles)
 
     @property
     def styles(self):
         base_style = Style(color=ColorRGB(50, 50, 50), text_align='justify')
         library = StyleLibrary(base_style=base_style)
         library.add('title', Style(text_indent=2, font_size=18))
-        library.add('red', Style(color=ColorRGB(255, 0, 0)))
+        library.add('red', Style(color=ColorRGB(255, 0, 0), padding='3'))
         return library
 
     def create_pdf(self):
@@ -44,6 +44,10 @@ Donec eu eros sit amet metus finibus dignissim. Aenean purus arcu, facilisis non
         self.pdf.add_paragraph('''
 Fusce ornare erat sit amet augue volutpat, nec porttitor metus venenatis. Fusce nec urna augue. Integer finibus vestibulum convallis. Mauris eget dapibus ipsum, mattis luctus mi. Donec faucibus, lacus in vestibulum venenatis, lacus massa fermentum neque, et convallis arcu lacus eget metus. In blandit nunc ut sem porta ullamcorper. Mauris a mi commodo, sollicitudin arcu sed, maximus mauris. Quisque vel facilisis felis, eu auctor enim.
         ''', style='red')
+        self.pdf.cursor.move(y=5)
+        self.pdf.add_paragraph('''
+Maecenas ut tincidunt nunc. Sed ipsum justo, porta sed elit rutrum, suscipit fermentum urna. Pellentesque sagittis elit nec elit tristique tempor et eu risus. Curabitur nec nibh at justo vehicula cursus eget facilisis eros. In tempus est quis nunc venenatis sodales. Duis id lacus sed eros convallis imperdiet. Pellentesque eget ex eros.
+        ''')
 
         self.pdf.write('basic.pdf')
 

@@ -20,7 +20,7 @@ from affinitic.pdf.tools import ColorRGB
 class TablePdf(object):
 
     def __init__(self):
-        self.pdf = Pdf(margins=[45, 15, 22, 15], styles=self.styles)
+        self.pdf = Pdf(margins=[15, 15, 15, 15], styles=self.styles)
 
     @property
     def styles(self):
@@ -35,19 +35,20 @@ class TablePdf(object):
                 border=1,
                 background_color=ColorRGB(230, 230, 230),
                 border_color=ColorRGB(90, 90, 90),
+                padding='3',
             ),
         )
         library.add(
             'header',
             RowStyle(
-                height=7,
+                height=0,
                 font_size=10,
                 background_color=ColorRGB(50, 50, 50),
                 color=ColorRGB(255, 255, 255),
             ),
             inherits=['table'],
         )
-        library.add('odd', RowStyle(height=5), inherits=['table'])
+        library.add('odd', RowStyle(height=0), inherits=['table'])
         library.add(
             'even',
             RowStyle(background_color=ColorRGB(190, 190, 190)),
