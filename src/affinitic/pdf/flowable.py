@@ -38,9 +38,8 @@ class ExtendedFlowable(Flowable):
             method = getattr(self, element['name'])
             method(*element['args'], **element['kwargs'])
 
-    def drawOn(self, *args, **kwargs):
-        Flowable.drawOn(self, *args, **kwargs)
-        # canvas.showPage()
+    def drawOn(self, canvas, *args, **kwargs):
+        Flowable.drawOn(self, canvas, *args, **kwargs)
 
     def _add_element(self, *args, **kwargs):
         """Add an element"""
@@ -69,6 +68,10 @@ class ExtendedFlowable(Flowable):
         paragraph = Paragraph(text, paragraph_style)
         width, height = paragraph.wrapOn(
             self.canv, p_width, p_height)
+
+        if kwargs.get('debug', False) is True:
+            paragraph_style.borderWidth = 1
+            paragraph_style.borderColor = ColorRGB(0, 0, 0, alpha=50).rgb
 
         paragraph.drawOn(
             canvas,

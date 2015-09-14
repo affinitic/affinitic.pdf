@@ -30,7 +30,8 @@ class Pdf(object):
                  format=A4,
                  margins=[10, 10, 10, 10],
                  measure_unit=mm,
-                 styles=None):
+                 styles=None,
+                 debug=False):
         self._io = StringIO()
         self._format = format
         self._margins = margins
@@ -39,6 +40,10 @@ class Pdf(object):
         self._story = []
         self._currentElement = None
         self._styles = styles or StyleLibrary()
+        self._debug = debug
+
+        if debug is True:
+            self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
 
     def _create_document(self, io):
         return SimpleDocTemplate(
@@ -109,6 +114,7 @@ class Pdf(object):
             self.get_style(style),
             width=width,
             height=height,
+            debug=self._debug,
         )
 
     def simulate_paragraph_size(
