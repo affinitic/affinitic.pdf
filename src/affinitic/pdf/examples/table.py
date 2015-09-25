@@ -41,10 +41,20 @@ class TablePdf(object):
         library.add(
             'header',
             RowStyle(
-                height=0,
+                height=10,
                 font_size=10,
                 background_color=ColorRGB(50, 50, 50),
                 color=ColorRGB(255, 255, 255),
+                vertical_align='middle',
+            ),
+            inherits=['table'],
+        )
+        library.add(
+            'footer',
+            RowStyle(
+                height=10,
+                background_color=ColorRGB(150, 150, 150),
+                vertical_align='bottom',
             ),
             inherits=['table'],
         )
@@ -66,6 +76,7 @@ class TablePdf(object):
         for idx, row in enumerate(self.content):
             style = idx % 2 and 'even' or 'odd'
             table.add_row(row, style=style)
+        table.add_row([u'Footer 1', u'Footer 2', u'Footer 3'], style='footer')
         table.render()
         self.pdf.write('table.pdf')
 
