@@ -79,6 +79,7 @@ class Table(object):
         self._pdf.cursor.move(y=self._height)
 
     def _get_cell_style(self, c_idx, column, r_idx, row):
+        """Return the compound style object for the current cell"""
         cell_name = 'table-%s-cell-%s-%s' % (self._id, r_idx, c_idx)
         col_name = 'table-%s-col-%s' % (self._id, c_idx)
         row_name = 'table-%s-row-%s' % (self._id, r_idx)
@@ -95,6 +96,7 @@ class Table(object):
         return self._get_chain_style(chain)
 
     def _get_row_style(self, r_idx, row):
+        """Return the compound style object for the current row"""
         r_name = 'table-%s-row-%s' % (self._id, r_idx)
         chain = []
         if self._pdf._styles.has_style(r_name):
@@ -103,6 +105,7 @@ class Table(object):
         return self._get_chain_style(chain)
 
     def _get_chain_style(self, chain):
+        """Return the compound style object from a chain of styles"""
         return self._pdf.get_style(
             chain[0],
             inherits=chain[1:],
@@ -125,6 +128,7 @@ class Table(object):
                 self._adapt_position(width, height, style, c_idx, r_idx)
 
     def _get_paragraph_infos(self, row, column, style):
+        """Return the simulate width and height of the paragraph"""
         width, height = self._pdf.simulate_paragraph_size(
             getattr(row, column.name),
             width=style.width,
@@ -157,6 +161,7 @@ class Table(object):
         self._pdf._styles.define(stylename, style)
 
     def _generate_background(self, style):
+        """Generate the background for a table cell"""
         if not style.border and not style.bg_color:
             return
         fill = style.background_color and 1 or 0
