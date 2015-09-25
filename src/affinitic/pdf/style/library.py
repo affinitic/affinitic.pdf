@@ -57,6 +57,10 @@ class StyleLibrary(object):
             style.inherit(self._styles[inherited_style])
         return style
 
+    def get_specific(self, stylename):
+        """Return a specific style without any inheritance"""
+        return self._styles.get(stylename)
+
     def has_style(self, stylename):
         """Verify if the given stylename exist in the library"""
         return stylename in self._styles

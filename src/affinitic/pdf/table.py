@@ -157,7 +157,14 @@ class Table(object):
             self._create_style(cell_name, space_before=space_before)
 
     def _create_style(self, stylename, **kwargs):
-        style = Style(**kwargs)
+        if self._pdf._styles.has_style(stylename):
+            style = self._pdf._styles.get_specific(stylename)
+        else:
+            style = Style(**kwargs)
+        for key, value in kwargs.items():
+            if hasattr(style, key) and getattr(style, key) > value:
+                continue
+            setattr(style, key, value)
         self._pdf._styles.define(stylename, style)
 
     def _generate_background(self, style):
