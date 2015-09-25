@@ -82,6 +82,7 @@ class StyleLibrary(object):
             height=None,
             line_height=None,
             padding='0',
+            space_before=0,
         )
 
     def _defines_base_styles(self):

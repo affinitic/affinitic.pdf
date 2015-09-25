@@ -73,10 +73,11 @@ class ExtendedFlowable(Flowable):
             paragraph_style.borderWidth = 1
             paragraph_style.borderColor = ColorRGB(0, 0, 0, alpha=50).rgb
 
+        y_pos = self.cursor.y - style.padding_top - style.space_before
         paragraph.drawOn(
             canvas,
             self.cursor.x * self.unit,
-            (self.cursor.y - style.padding_top) * self.unit - height,
+            y_pos * self.unit - height,
         )
 
         self.cursor.move(y=height / self.unit + style.padding_v)

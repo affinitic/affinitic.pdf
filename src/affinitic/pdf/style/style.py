@@ -28,6 +28,7 @@ class Style(object):
         'height',
         'line_height',
         'padding',
+        'space_before',
     )
     _mandatory_attrs = (
     )
