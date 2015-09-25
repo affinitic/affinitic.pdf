@@ -42,6 +42,7 @@ class Style(object):
         'font_size': 'fontSize',
         '_line_height': 'leading',
     }
+    _default_values = {}
 
     def __init__(self, **kwargs):
         self._inherits = []
@@ -50,6 +51,9 @@ class Style(object):
                 raise ValueError(
                     "Unknown argument '%s' for Style object" % arg)
             setattr(self, arg, kwargs[arg])
+        for key, value in self._default_values.items():
+            if not hasattr(self, key):
+                setattr(self, key, value)
 
     def copy(self):
         """Return a copy of the current object"""
@@ -218,7 +222,11 @@ class ColumnStyle(Style):
 class RowStyle(Style):
     _accepted_attrs = Style._accepted_attrs + (
         'border',
+        'vertical_align',
     )
     _mandatory_attrs = Style._mandatory_attrs + (
         'height',
     )
+    _default_values = {
+        'vertical_align': 'top',
+    }
