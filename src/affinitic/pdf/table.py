@@ -79,14 +79,17 @@ class Table(object):
         self._pdf.cursor.move(y=self._height)
 
     def _get_cell_style(self, c_idx, column, r_idx, row):
-        c_name = 'table-%s-col-%s' % (self._id, c_idx)
-        r_name = 'table-%s-row-%s' % (self._id, r_idx)
+        cell_name = 'table-%s-cell-%s-%s' % (self._id, r_idx, c_idx)
+        col_name = 'table-%s-col-%s' % (self._id, c_idx)
+        row_name = 'table-%s-row-%s' % (self._id, r_idx)
         chain = []
-        if self._pdf._styles.has_style(c_name):
-            chain.append(c_name)
+        if self._pdf._styles.has_style(cell_name):
+            chain.append(cell_name)
+        if self._pdf._styles.has_style(col_name):
+            chain.append(col_name)
         chain.append(column.style)
-        if self._pdf._styles.has_style(r_name):
-            chain.append(r_name)
+        if self._pdf._styles.has_style(row_name):
+            chain.append(row_name)
         chain.append(row.style)
         chain.append(self.style)
         return self._get_chain_style(chain)
@@ -113,22 +116,45 @@ class Table(object):
                     column.style,
                     inherits=[row.style, self.style],
                 )
-                row_style = self._pdf.get_style(row.style)
-                width, height = self._pdf.simulate_paragraph_size(
-                    getattr(row, column.name),
-                    width=style.width,
-                    height=row_style.height,
-                    style=style,
-                )
+                width, height = self._get_paragraph_infos(row, column, style)
+                self._adapt_size(width, height, style, c_idx, r_idx)
+        for c_idx, column in enumerate(self._columns):
+            for r_idx, row in enumerate(self._rows):
+                style = self._get_cell_style(c_idx, column, r_idx, row)
+                width, height = self._get_paragraph_infos(row, column, style)
+                self._adapt_position(width, height, style, c_idx, r_idx)
 
-                if width > style.width:
-                    col_style = Style(width=width + style.padding_h)
-                    style_id = 'table-%s-col-%s' % (self._id, c_idx)
-                    self._pdf._styles.define(style_id, col_style)
-                if height > row_style.height:
-                    row_style = Style(height=height)
-                    style_id = 'table-%s-row-%s' % (self._id, r_idx)
-                    self._pdf._styles.define(style_id, row_style)
+    def _get_paragraph_infos(self, row, column, style):
+        width, height = self._pdf.simulate_paragraph_size(
+            getattr(row, column.name),
+            width=style.width,
+            height=style.height,
+            style=style,
+        )
+        return width, height
+
+    def _adapt_size(self, width, height, style, c_idx, r_idx):
+        """Create specific styles for row or column"""
+        c_name = 'table-%s-col-%s' % (self._id, c_idx)
+        r_name = 'table-%s-row-%s' % (self._id, r_idx)
+        if width > style.width:
+            self._create_style(c_name, width=(width + style.padding_h))
+        if height > style.height:
+            self._create_style(r_name, height=height)
+
+    def _adapt_position(self, width, height, style, c_idx, r_idx):
+        """Create specific styles for cells"""
+        cell_name = 'table-%s-cell-%s-%s' % (self._id, r_idx, c_idx)
+        if height < style.height and style.vertical_align is 'middle':
+            space_before = style.space_before + (style.height - height) / 2
+            self._create_style(cell_name, space_before=space_before)
+        if height < style.height and style.vertical_align is 'bottom':
+            space_before = style.space_before + (style.height - height)
+            self._create_style(cell_name, space_before=space_before)
+
+    def _create_style(self, stylename, **kwargs):
+        style = Style(**kwargs)
+        self._pdf._styles.define(stylename, style)
 
     def _generate_background(self, style):
         if not style.border and not style.bg_color:
