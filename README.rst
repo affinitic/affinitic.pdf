@@ -4,6 +4,15 @@ Introduction
 ============
 
 
+Tests
+=====
+
+This package is tested using Travis CI. The current status of the add-on is :
+
+.. image:: https://api.travis-ci.org/affinitic/affinitic.pdf.png
+    :target: http://travis-ci.org/affinitic/affinitic.pdf
+
+
 Credits
 =======
 
