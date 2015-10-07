@@ -39,6 +39,7 @@ class TestStyle(unittest2.TestCase):
             height=None,
             line_height=None,
             padding='0',
+            first_line_indent=0,
         )
         style.name = 'base'
         style.unit = mm
