@@ -169,14 +169,21 @@ class Pdf(object):
         """Define a pdf file to be set as the background for each pages"""
         self._background = filepath
 
+    @property
+    def content(self):
+        """Return the content of the pdf"""
+        self._document.build(self._story)
+        if hasattr(self, '_background'):
+            content = StringIO()
+            self._merge_pdf(self._io.getvalue(), content)
+            return content.getvalue()
+        else:
+            return self._io.getvalue()
+
     def write(self, filepath):
         """Write the content of the pdf into the given file"""
-        self._document.build(self._story)
         f = open(filepath, 'w')
-        if hasattr(self, '_background'):
-            self._merge_pdf(self._io.getvalue(), f)
-        else:
-            f.write(self._io.getvalue())
+        f.write(self.content)
         f.close()
 
     @property
