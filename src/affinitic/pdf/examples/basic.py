@@ -24,6 +24,7 @@ class BasicPdf(object):
         base_style = Style(color=ColorRGB(50, 50, 50), text_align='justify')
         library = StyleLibrary(base_style=base_style)
         library.add('title', Style(text_indent=2, font_size=18))
+        library.add('first', Style(first_line_indent=10))
         library.add('red', Style(color=ColorRGB(255, 0, 0), padding='3'))
         return library
 
@@ -39,7 +40,7 @@ class BasicPdf(object):
         self.pdf.cursor.move(y=10)
         self.pdf.add_paragraph('''
 Donec eu eros sit amet metus finibus dignissim. Aenean purus arcu, facilisis non placerat in, commodo non mi. Mauris vel placerat purus. Morbi at placerat tortor. Aenean pretium lectus et magna dictum, id venenatis mauris laoreet. Sed euismod vel justo sed ultricies. Donec sed urna nec eros venenatis posuere. Vivamus facilisis blandit orci ac consectetur.
-        ''')
+        ''', style='first')
         self.pdf.cursor.move(y=5)
         self.pdf.add_paragraph('''
 Fusce ornare erat sit amet augue volutpat, nec porttitor metus venenatis. Fusce nec urna augue. Integer finibus vestibulum convallis. Mauris eget dapibus ipsum, mattis luctus mi. Donec faucibus, lacus in vestibulum venenatis, lacus massa fermentum neque, et convallis arcu lacus eget metus. In blandit nunc ut sem porta ullamcorper. Mauris a mi commodo, sollicitudin arcu sed, maximus mauris. Quisque vel facilisis felis, eu auctor enim.

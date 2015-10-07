@@ -84,7 +84,7 @@ class TablePdf(object):
     def content(self):
         return (
             ['L1.1', 'L1.2', 'L1.3'],
-            ['L2.1', 'L2.2', 'L2.3 lorem ipsum dolor sit amet'],
+            ['L2.1', 'L2.2', 'L2.3<br/>lorem ipsum dolor sit amet'],
             ['L3.1-1-1-1-1', 'L3.2', 'L3.3'],
             ['L4.1', 'L4.2', 'L4.3'],
         )
