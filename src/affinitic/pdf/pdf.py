@@ -11,6 +11,8 @@ Created by mpeeters
 from cStringIO import StringIO
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import landscape
+from reportlab.lib.pagesizes import portrait
 from reportlab.lib.units import mm
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus.flowables import PageBreak
@@ -25,15 +27,21 @@ from affinitic.pdf.tools import ColorRGB
 
 class Pdf(object):
     _simulation_doc = None
+    _orientations = {
+        'portrait': portrait,
+        'landscape': landscape,
+    }
 
     def __init__(self,
                  format=A4,
+                 orientation='portrait',
                  margins=[10, 10, 10, 10],
                  measure_unit=mm,
                  styles=None,
                  debug=False):
         self._io = StringIO()
         self._format = format
+        self._orientation = self._orientations.get(orientation)
         self._margins = margins
         self._measure_unit = measure_unit
         self._document = self._create_document(self._io)
@@ -48,7 +56,7 @@ class Pdf(object):
     def _create_document(self, io):
         return SimpleDocTemplate(
             io,
-            pagesize=self._format,
+            pagesize=self._orientation(self._format),
             topMargin=self._margins[0] * self._measure_unit - 2 * mm,
             rightMargin=self._margins[1] * self._measure_unit + 2 * mm,
             bottomMargin=self._margins[2] * self._measure_unit + 2 * mm,
