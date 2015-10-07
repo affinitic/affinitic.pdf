@@ -29,6 +29,7 @@ class Style(object):
         'line_height',
         'padding',
         'space_before',
+        'first_line_indent',
     )
     _mandatory_attrs = (
     )
@@ -41,6 +42,7 @@ class Style(object):
         'font_family': 'fontName',
         'font_size': 'fontSize',
         '_line_height': 'leading',
+        '_first_line_indent': 'firstLineIndent',
     }
     _default_values = {}
 
@@ -201,6 +203,10 @@ class Style(object):
             'bottom': float(paddings[2]),
             'left': float(paddings[3]),
         }
+
+    @property
+    def _first_line_indent(self):
+        return self.first_line_indent * self.unit
 
 
 class TableStyle(Style):

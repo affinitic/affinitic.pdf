@@ -87,6 +87,7 @@ class StyleLibrary(object):
             line_height=None,
             padding='0',
             space_before=0,
+            first_line_indent=0,
         )
 
     def _defines_base_styles(self):
