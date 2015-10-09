@@ -114,8 +114,8 @@ class ExtendedFlowable(Flowable):
         self.canv.rect(
             self.cursor.x * self.unit,
             self.cursor.y * self.unit - height * self.unit,
-            width * self.unit,
-            height * self.unit,
+            width * self.unit + 0.3,
+            height * self.unit + 0.3,
             fill=fill,
             stroke=stroke,
         )
