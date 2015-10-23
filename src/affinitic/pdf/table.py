@@ -169,7 +169,7 @@ class Table(object):
 
     def _generate_background(self, style):
         """Generate the background for a table cell"""
-        if not style.border and not style.bg_color:
+        if not style.border and not style.background_color:
             return
         fill = style.background_color and 1 or 0
         bg_color = style.background_color and style.background_color or None
