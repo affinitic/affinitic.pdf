@@ -8,6 +8,8 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+import os
+
 from affinitic.pdf.pdf import Pdf
 from affinitic.pdf.style import Style
 from affinitic.pdf.style import StyleLibrary
@@ -17,7 +19,13 @@ from affinitic.pdf.tools import ColorRGB
 class BasicPdf(object):
 
     def __init__(self):
-        self.pdf = Pdf(margins=[15, 15, 15, 15], styles=self.styles)
+        self.pdf = Pdf(margins=[29, 15, 15, 15], styles=self.styles)
+        self.pdf.define_background(os.path.join(self.current_path,
+                                                'background.pdf'))
+
+    @property
+    def current_path(self):
+        return os.path.split(os.path.abspath(__file__))[0]
 
     @property
     def styles(self):
