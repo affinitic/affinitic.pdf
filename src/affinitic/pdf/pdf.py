@@ -214,6 +214,6 @@ class Pdf(object):
         content = PdfFileReader(content_file)
         for page in content.pages:
             background_content = background.getPage(0)
-            page.mergePage(background_content)
-            output.addPage(page)
+            background_content.mergePage(page)
+            output.addPage(background_content)
         output.write(output_file)
