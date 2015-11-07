@@ -60,9 +60,16 @@ class Table(object):
         """Render the table"""
         self.simulate()
         for r_idx, row in enumerate(self._rows):
+            row_y = self._pdf.cursor.y
             for c_idx, column in enumerate(self._columns):
                 style = self._get_cell_style(c_idx, column, r_idx, row)
                 row_style = self._get_row_style(r_idx, row)
+                real_height = style.height + style.padding_v
+
+                # XXX Find why the current position is twice the expected value
+                if ((row_y / 2) + real_height) > self._pdf.height:
+                    self._pdf.add_page_break()
+                    row_y = 0
 
                 self._generate_background(style)
                 self._pdf.add_paragraph(
@@ -73,8 +80,8 @@ class Table(object):
                 )
                 self._pdf.cursor.move(x=style.width)
                 if c_idx + 1 < len(self._columns):
-                    real_height = style.height + style.padding_v
                     self._pdf.cursor.move(y=real_height * -1)
+            row_y = self._pdf.cursor.y
             self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move(y=self._height)
