@@ -59,9 +59,8 @@ class Table(object):
     def render(self):
         """Render the table"""
         self.simulate()
-        for c_idx, column in enumerate(self._columns):
-            style = None
-            for r_idx, row in enumerate(self._rows):
+        for r_idx, row in enumerate(self._rows):
+            for c_idx, column in enumerate(self._columns):
                 style = self._get_cell_style(c_idx, column, r_idx, row)
                 row_style = self._get_row_style(r_idx, row)
 
@@ -72,11 +71,11 @@ class Table(object):
                     height=row_style.height,
                     style=style,
                 )
-            if style is not None:
-                self._pdf.cursor.move(
-                    x=style.width,
-                    y=self._height * - 1,
-                )
+                self._pdf.cursor.move(x=style.width)
+                if c_idx + 1 < len(self._columns):
+                    real_height = style.height + style.padding_v
+                    self._pdf.cursor.move(y=real_height * -1)
+            self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move_to(x=0)
         self._pdf.cursor.move(y=self._height)
 
