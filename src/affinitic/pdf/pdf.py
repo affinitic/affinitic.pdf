@@ -74,16 +74,14 @@ class Pdf(object):
         """Return the document width"""
         doc = self._document
         width = doc.width / self._measure_unit
-        margin = (doc.rightMargin + doc.leftMargin) / self._measure_unit
-        return width - margin
+        return width
 
     @property
     def height(self):
         """Return the document height"""
         doc = self._document
         height = doc.height / self._measure_unit
-        margin = (doc.topMargin + doc.bottomMargin) / self._measure_unit
-        return height - margin
+        return height
 
     def add_page_break(self):
         """Add a page break element"""
