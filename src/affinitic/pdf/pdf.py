@@ -83,6 +83,16 @@ class Pdf(object):
         height = doc.height / self._measure_unit
         return height
 
+    @property
+    def current_height(self):
+        """Return the current element height"""
+        return self._current_height
+
+    def _adapt_height(self, height):
+        width, height = self.cursor._apply_changes(0, height)
+        self._current_height += height
+        self.cursor._track_changes()
+
     def add_page_break(self):
         """Add a page break element"""
         self._story.append(PageBreak())
@@ -95,6 +105,7 @@ class Pdf(object):
         element = ExtendedFlowable(self._measure_unit)
         self._currentElement = element
         self._story.append(element)
+        self._current_height = 0.0
 
     def add_grid(self, size, color):
         """Display a grid with the given size and color"""
@@ -117,13 +128,23 @@ class Pdf(object):
     def add_paragraph(self, text, style='paragraph', width=None, height=None):
         """Add a new paragraph element"""
         self._verify_element()
+        style = self.get_style(style)
         self._currentElement.draw_parapraph(
             text,
-            self.get_style(style),
+            style,
             width=width,
             height=height,
             debug=self._debug,
         )
+        width, height = self.simulate_paragraph_size(
+            text,
+            style.name,
+            width,
+            height,
+        )
+        if height < style.height:
+            height = style.height
+        self._adapt_height(height + style.padding_v)
 
     def simulate_paragraph_size(
             self,
