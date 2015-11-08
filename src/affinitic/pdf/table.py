@@ -30,6 +30,10 @@ class Table(object):
     def unit(self):
         return self._pdf._measure_unit
 
+    @property
+    def cursor(self):
+        return self._pdf.cursor
+
     def add_column(self, title=None, format=None, style=None):
         """Add a new column to the table"""
         if style and isinstance(self._pdf.get_style(style), ColumnStyle) is False:
@@ -56,20 +60,27 @@ class Table(object):
             content_dict[self._columns[i].name] = content[i]
         self._rows.append(Row(content_dict, title=title, style=style))
 
+    def _get_base_y(self):
+        """Return the y position for height calculcation"""
+        x, y = self.cursor._corrected_x, self.cursor._corrected_y
+        x, y = self.cursor._apply_changes(x, y)
+        return y
+
     def render(self):
         """Render the table"""
         self.simulate()
+        base_y = self._get_base_y()
+        current_height = 0.0
         for r_idx, row in enumerate(self._rows):
-            row_y = self._pdf.cursor.y
             for c_idx, column in enumerate(self._columns):
                 style = self._get_cell_style(c_idx, column, r_idx, row)
                 row_style = self._get_row_style(r_idx, row)
                 real_height = style.height + style.padding_v
 
-                # XXX Find why the current position is twice the expected value
-                if ((row_y / 2) + real_height) > self._pdf.height:
+                if (base_y + current_height + real_height) > self._pdf.height:
                     self._pdf.add_page_break()
-                    row_y = 0
+                    base_y = 0.0
+                    current_height = 0.0
 
                 self._generate_background(style)
                 self._pdf.add_paragraph(
@@ -78,13 +89,15 @@ class Table(object):
                     height=row_style.height,
                     style=style,
                 )
-                self._pdf.cursor.move(x=style.width)
+                self.cursor.move(x=style.width)
+                if c_idx + 1 == len(self._columns):
+                    current_height += real_height
+                    self.cursor._correction(y=(real_height * (len(self._columns) - 2)))
                 if c_idx + 1 < len(self._columns):
-                    self._pdf.cursor.move(y=real_height * -1)
-            row_y = self._pdf.cursor.y
-            self._pdf.cursor.move_to(x=0)
-        self._pdf.cursor.move_to(x=0)
-        self._pdf.cursor.move(y=self._height)
+                    self.cursor.move(y=real_height * -1)
+            self.cursor.move_to(x=0)
+        self.cursor.move_to(x=0)
+        self.cursor._track_changes()
 
     def _get_cell_style(self, c_idx, column, r_idx, row):
         """Return the compound style object for the current cell"""
