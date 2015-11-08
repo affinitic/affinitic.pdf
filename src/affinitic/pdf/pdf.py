@@ -50,7 +50,7 @@ class Pdf(object):
         self._styles = styles or StyleLibrary()
         self._debug = debug
 
-        if debug is True:
+        if self._debug is True:
             self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
 
     def _create_document(self, io):
@@ -86,6 +86,8 @@ class Pdf(object):
     def add_page_break(self):
         """Add a page break element"""
         self._story.append(PageBreak())
+        if self._debug is True:
+            self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
         self.add_element()
 
     def add_element(self):
@@ -100,7 +102,7 @@ class Pdf(object):
         width = self._document.width / mm
         height = self._document.height / mm
         element.draw_grid(size, width, height, color)
-        self._story.insert(0, element)
+        self._story.append(element)
 
     def add_style(self, stylename, style, inherits=None):
         """Add a new style"""
