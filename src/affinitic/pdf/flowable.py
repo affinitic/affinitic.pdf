@@ -10,16 +10,28 @@ Created by mpeeters
 
 from reportlab.platypus import Flowable, Paragraph
 
-import inspect
-
 from affinitic.pdf.cursor import Cursor
 from affinitic.pdf.tools import ColorRGB
 
 
-class ExtendedFlowable(Flowable):
+def add_element(me):
+
+    def wrapper(*args, **kwargs):
+        flowable = args[0]
+        flowable._elements.append({
+            'method': me,
+            'args': args,
+            'kwargs': kwargs,
+            'position': flowable.cursor.real_position,
+        })
+
+    return wrapper
+
+
+class ExtendedFlowable(Flowable, object):
 
     def __init__(self, measure_unit):
-        Flowable.__init__(self)
+        super(ExtendedFlowable, self).__init__()
         self.unit = measure_unit
         self.cursor = Cursor()
         self._elements = []
@@ -35,19 +47,14 @@ class ExtendedFlowable(Flowable):
                                  y=position.y - last_position.y)
             else:
                 self.cursor.move_to(x=position.x, y=position.y)
-            method = getattr(self, element['name'])
-            method(*element['args'], **element['kwargs'])
+            element['method'](*element['args'], **element['kwargs'])
 
     def drawOn(self, canvas, *args, **kwargs):
         Flowable.drawOn(self, canvas, *args, **kwargs)
 
-    def _add_element(self, *args, **kwargs):
-        """Add an element"""
-        self._elements.append({
-            'name': '_%s' % inspect.stack()[1][3].replace('add', 'draw'),
-            'args': args,
-            'kwargs': kwargs,
-            'position': self.cursor.real_position})
+    @add_element
+    def draw_string(self, *args, **kwargs):
+        return self._draw_string(*args, **kwargs)
 
     def _draw_string(self, value=''):
         """
@@ -58,6 +65,10 @@ class ExtendedFlowable(Flowable):
             self.cursor.x * self.unit,
             self.cursor.y * self.unit,
             value)
+
+    @add_element
+    def draw_paragraph(self, *args, **kwargs):
+        return self._draw_paragraph(*args, **kwargs)
 
     def _draw_paragraph(self, text, style, **kwargs):
         """Draw a paragraph"""
@@ -98,6 +109,10 @@ class ExtendedFlowable(Flowable):
 
         return paragraph_width, paragraph_height
 
+    @add_element
+    def draw_rectangle(self, *args, **kwargs):
+        return self._draw_rectangle(*args, **kwargs)
+
     def _draw_rectangle(
             self,
             width,
@@ -120,6 +135,10 @@ class ExtendedFlowable(Flowable):
             stroke=stroke,
         )
 
+    @add_element
+    def draw_grid(self, *args, **kwargs):
+        return self._draw_grid(*args, **kwargs)
+
     def _draw_grid(
             self,
             size,
@@ -136,6 +155,10 @@ class ExtendedFlowable(Flowable):
             self.cursor.move(y=size)
             self._draw_h_line(width, color=color)
 
+    @add_element
+    def draw_h_line(self, *args, **kwargs):
+        return self._draw_h_line(*args, **kwargs)
+
     def _draw_h_line(self, width, color=ColorRGB(r=150, g=150, b=150)):
         """Draw an horizontal line"""
         self.canv.setStrokeColor(color.rgb)
@@ -145,6 +168,10 @@ class ExtendedFlowable(Flowable):
             (self.cursor.x + width) * self.unit,
             self.cursor.y * self.unit)
 
+    @add_element
+    def draw_v_line(self, *args, **kwargs):
+        return self._draw_h_line(*args, **kwargs)
+
     def _draw_v_line(self, height, color=ColorRGB(r=150, g=150, b=150)):
         """Draw a vertical line"""
         self.canv.setStrokeColor(color.rgb)
@@ -153,13 +180,6 @@ class ExtendedFlowable(Flowable):
             self.cursor.y * self.unit,
             self.cursor.x * self.unit,
             (self.cursor.y - height) * self.unit)
-
-    draw_string = _add_element
-    draw_parapraph = _add_element
-    draw_rectangle = _add_element
-    draw_grid = _add_element
-    draw_h_line = _add_element
-    draw_v_line = _add_element
 
 
 class SimulationFlowable(ExtendedFlowable):
