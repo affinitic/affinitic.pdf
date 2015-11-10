@@ -17,6 +17,7 @@ from reportlab.lib.units import mm
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus.flowables import PageBreak
 
+from affinitic.pdf.element import DeferredElement
 from affinitic.pdf.flowable import ExtendedFlowable
 from affinitic.pdf.flowable import SimulationFlowable
 from affinitic.pdf.style import Style
@@ -38,6 +39,8 @@ class Pdf(object):
                  margins=[10, 10, 10, 10],
                  measure_unit=mm,
                  styles=None,
+                 header=None,
+                 footer=None,
                  debug=False):
         self._io = StringIO()
         self._format = format
@@ -49,9 +52,15 @@ class Pdf(object):
         self._currentElement = None
         self._styles = styles or StyleLibrary()
         self._debug = debug
+        self._header = header
+        self._footer = footer
+        self._page_counter = 1
+        self._current_height = 0.0
 
         if self._debug is True:
             self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
+        if self._header:
+            self._story.append(self._header(self))
 
     def _create_document(self, io):
         return SimpleDocTemplate(
@@ -68,6 +77,10 @@ class Pdf(object):
             self._simulation_doc = self._create_document(StringIO())
             self._simulation_doc.build([])
         return self._simulation_doc
+
+    @property
+    def page_number(self):
+        return self._page_counter
 
     @property
     def width(self):
@@ -95,9 +108,15 @@ class Pdf(object):
 
     def add_page_break(self):
         """Add a page break element"""
+        if self._footer:
+            self._story.append(self._footer(self))
         self._story.append(PageBreak())
+        if self._header:
+            self._story.append(self._header(self))
+        self._page_counter += 1
         if self._debug is True:
             self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
+        self._current_height = 0.0
         self.add_element()
 
     def add_element(self):
@@ -105,7 +124,6 @@ class Pdf(object):
         element = ExtendedFlowable(self._measure_unit)
         self._currentElement = element
         self._story.append(element)
-        self._current_height = 0.0
 
     def add_grid(self, size, color):
         """Display a grid with the given size and color"""
@@ -129,7 +147,7 @@ class Pdf(object):
         """Add a new paragraph element"""
         self._verify_element()
         style = self.get_style(style)
-        self._currentElement.draw_parapraph(
+        self._currentElement.draw_paragraph(
             text,
             style,
             width=width,
@@ -201,6 +219,9 @@ class Pdf(object):
     @property
     def content(self):
         """Return the content of the pdf"""
+        if self._footer:
+            self._story.append(self._footer(self))
+        self._render_deferred_elements()
         self._document.build(self._story)
         if hasattr(self, '_background'):
             content = StringIO()
@@ -208,6 +229,12 @@ class Pdf(object):
             return content.getvalue()
         else:
             return self._io.getvalue()
+
+    def _render_deferred_elements(self):
+        """Render the deferred elements like footers or headers"""
+        for element in self._story:
+            if isinstance(element, DeferredElement):
+                element._render()
 
     def write(self, filepath):
         """Write the content of the pdf into the given file"""
