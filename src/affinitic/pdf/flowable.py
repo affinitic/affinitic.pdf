@@ -8,6 +8,8 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+from reportlab.graphics.barcode.widgets import BarcodeCode128
+from reportlab.graphics.shapes import Drawing
 from reportlab.platypus import Flowable, Paragraph
 
 from affinitic.pdf.cursor import Cursor
@@ -180,6 +182,20 @@ class ExtendedFlowable(Flowable, object):
             self.cursor.y * self.unit,
             self.cursor.x * self.unit,
             (self.cursor.y - height) * self.unit)
+
+    @add_element
+    def draw_barcode(self, *args, **kwargs):
+        return self._draw_barcode(*args, **kwargs)
+
+    def _draw_barcode(self, value):
+        """Draw a barcode"""
+        barcode = Drawing()
+        barcode.add(BarcodeCode128(value=value, barWidth=0.75))
+        barcode.drawOn(
+            self.canv,
+            self.cursor.x * self.unit,
+            self.cursor.y * self.unit,
+        )
 
 
 class SimulationFlowable(ExtendedFlowable):
