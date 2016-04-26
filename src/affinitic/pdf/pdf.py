@@ -212,10 +212,10 @@ class Pdf(object):
             stroke=stroke,
         )
 
-    def add_barcode(self, value):
+    def add_barcode(self, value, barHeight=None, barWidth=0.75):
         """Add a barcode"""
         self._verify_element()
-        self._currentElement.draw_barcode(value)
+        self._currentElement.draw_barcode(value, barHeight, barWidth)
 
     def define_background(self, filepath):
         """Define a pdf file to be set as the background for each pages"""

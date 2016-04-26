@@ -187,10 +187,20 @@ class ExtendedFlowable(Flowable, object):
     def draw_barcode(self, *args, **kwargs):
         return self._draw_barcode(*args, **kwargs)
 
-    def _draw_barcode(self, value):
+    def _draw_barcode(self, value, barHeight, barWidth):
         """Draw a barcode"""
         barcode = Drawing()
-        barcode.add(BarcodeCode128(value=value, barWidth=0.75))
+        if barHeight is None:
+            barcode.add(BarcodeCode128(
+                value=value,
+                barWidth=barWidth
+            ))
+        else:
+            barcode.add(BarcodeCode128(
+                value=value,
+                barHeight=barHeight,
+                barWidth=barWidth
+            ))
         barcode.drawOn(
             self.canv,
             self.cursor.x * self.unit,
