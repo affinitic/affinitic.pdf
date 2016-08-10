@@ -3,7 +3,7 @@ python:
   - "2.6"
   - "2.7"
 install:
-  - python bootstrap.py --buildout-version 2.4.3 --setuptools-version=18.2
+  - python bootstrap.py
   - bin/buildout -N -q -t 3
 script:
   - bin/test
