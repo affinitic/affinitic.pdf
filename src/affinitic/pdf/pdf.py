@@ -41,7 +41,8 @@ class Pdf(object):
                  styles=None,
                  header=None,
                  footer=None,
-                 debug=False):
+                 debug=False,
+                 localizer=None):
         self._io = StringIO()
         self._format = format
         self._orientation = self._orientations.get(orientation)
@@ -56,6 +57,8 @@ class Pdf(object):
         self._footer = footer
         self._page_counter = 1
         self._current_height = 0.0
+
+        self.localizer = localizer
 
         if self._debug is True:
             self.add_grid(5, ColorRGB(200, 0, 0, alpha=50))
