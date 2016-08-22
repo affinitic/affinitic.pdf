@@ -4,7 +4,8 @@ Changelog
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Allow to add localizer into pdf, so we can translate footer for example refs #8744
+  [schminitz]
 
 
 0.1.1 (2016-04-26)
