@@ -10,6 +10,7 @@ Created by mpeeters
 
 from affinitic.pdf.pdf import Pdf
 from affinitic.pdf.style import ColumnStyle
+from affinitic.pdf.style import ColumnHeaderStyle
 from affinitic.pdf.style import RowStyle
 from affinitic.pdf.style import TableStyle
 from affinitic.pdf.style import Style
@@ -28,7 +29,8 @@ class TablePdf(object):
         library = StyleLibrary(base_style=base_style)
         library.add('col1', ColumnStyle(width=10))
         library.add('col2', ColumnStyle(width=50))
-        library.add('col3', ColumnStyle(width=30))
+        library.add('col3', ColumnStyle(width=30, font_size=7))
+        library.add('col3-header', ColumnHeaderStyle(font_size=10))
         library.add(
             'table',
             TableStyle(
@@ -70,7 +72,7 @@ class TablePdf(object):
         table = self.pdf.add_table('tableid', style='table')
         table.add_column(style='col1')
         table.add_column(style='col2')
-        table.add_column(style='col3')
+        table.add_column(style='col3', header_style='col3-header')
         table.add_row([u'Title 1', u'Title 2', u'Title 3'], style='header')
 
         for idx, row in enumerate(self.content):
