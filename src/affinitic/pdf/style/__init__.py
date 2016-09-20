@@ -9,14 +9,16 @@ Created by mpeeters
 """
 
 from affinitic.pdf.style.library import StyleLibrary
+from affinitic.pdf.style.style import ColumnHeaderStyle
 from affinitic.pdf.style.style import ColumnStyle
 from affinitic.pdf.style.style import RowStyle
 from affinitic.pdf.style.style import Style
 from affinitic.pdf.style.style import TableStyle
 
 __all__ = (
-    RowStyle.__name__,
+    ColumnHeaderStyle.__name__,
     ColumnStyle.__name__,
+    RowStyle.__name__,
     Style.__name__,
     StyleLibrary.__name__,
     TableStyle.__name__,

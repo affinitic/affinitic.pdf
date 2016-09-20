@@ -8,6 +8,7 @@ Created by mpeeters
 :license: GPL, see LICENCE.txt for more details.
 """
 
+from affinitic.pdf.style import ColumnHeaderStyle
 from affinitic.pdf.style import ColumnStyle
 from affinitic.pdf.style import RowStyle
 from affinitic.pdf.style import Style
@@ -34,22 +35,27 @@ class Table(object):
     def cursor(self):
         return self._pdf.cursor
 
-    def add_column(self, title=None, format=None, style=None):
+    def add_column(self, title=None, format=None, style=None, header_style=None):
         """Add a new column to the table"""
         if style and isinstance(self._pdf.get_style(style), ColumnStyle) is False:
             raise ValueError(u'The given column style must be an instance of '
                              u'ColumnStyle class')
+        if header_style and \
+           isinstance(self._pdf.get_style(header_style), ColumnHeaderStyle) is False:
+            raise ValueError(u'The given column header style must be an '
+                             u'instance of ColumnHeaderStyle class')
         self._columns.append(Column(
             'column-%s' % len(self._columns),
             title=title,
             format=format,
             style=style,
+            header_style=header_style,
         ))
 
     def add_row(self, content, title=None, style=None):
         """Add a new row to the table"""
         if style and isinstance(self._pdf.get_style(style), RowStyle) is False:
-            raise ValueError(u'The given column style must be an instance of '
+            raise ValueError(u'The given row style must be an instance of '
                              u'RowStyle class')
         content_dict = {}
         if len(content) != len(self._columns):
@@ -96,6 +102,8 @@ class Table(object):
             chain.append(cell_name)
         if self._pdf._styles.has_style(col_name):
             chain.append(col_name)
+        if r_idx == 0 and column.header_style:
+            chain.append(column.header_style)
         chain.append(column.style)
         if self._pdf._styles.has_style(row_name):
             chain.append(row_name)
@@ -204,11 +212,12 @@ class Table(object):
 
 class Column(object):
 
-    def __init__(self, name, title=None, format=None, style=None):
+    def __init__(self, name, title=None, format=None, style=None, header_style=None):
         self.name = name
         self.title = title
         self.format = format
         self.style = style
+        self.header_style = header_style
 
 
 class Row(object):

@@ -4,13 +4,14 @@ Changelog
 0.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add ColumnHeaderStyle for tables : #8811
+  [mpeeters]
 
 
 0.1.2 (2016-09-08)
 ------------------
 
-- Allow to add localizer into pdf, so we can translate footer for example refs #8744
+- Allow to add localizer into pdf, so we can translate footer for example : #8744
   [schminitz]
 
 

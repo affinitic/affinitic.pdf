@@ -225,6 +225,10 @@ class ColumnStyle(Style):
     )
 
 
+class ColumnHeaderStyle(Style):
+    """Specific column header style"""
+
+
 class RowStyle(Style):
     _accepted_attrs = Style._accepted_attrs + (
         'border',

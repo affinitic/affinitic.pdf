@@ -14,6 +14,7 @@ from affinitic.pdf.element import Header
 from affinitic.pdf.pdf import Pdf
 from affinitic.pdf.tools import ColorRGB
 
+from affinitic.pdf.style import ColumnHeaderStyle
 from affinitic.pdf.style import ColumnStyle
 from affinitic.pdf.style import RowStyle
 from affinitic.pdf.style import Style
@@ -28,6 +29,7 @@ __all__ = (
     Header.__name__,
     Pdf.__name__,
     # Style
+    ColumnHeaderStyle.__name__,
     ColumnStyle.__name__,
     RowStyle.__name__,
     Style.__name__,
