@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.3 (unreleased)
+0.1.3 (2016-10-10)
 ------------------
 
 - Add ColumnHeaderStyle for tables : #8811
