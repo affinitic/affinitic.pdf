@@ -4,7 +4,8 @@ Changelog
 0.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add the add_image method
+  [mpeeters]
 
 
 0.1.3 (2016-10-10)

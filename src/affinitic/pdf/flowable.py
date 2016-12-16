@@ -11,6 +11,7 @@ Created by mpeeters
 from reportlab.graphics.barcode.widgets import BarcodeCode128
 from reportlab.graphics.shapes import Drawing
 from reportlab.platypus import Flowable, Paragraph
+from reportlab.platypus.flowables import Image
 
 from affinitic.pdf.cursor import Cursor
 from affinitic.pdf.tools import ColorRGB
@@ -205,6 +206,29 @@ class ExtendedFlowable(Flowable, object):
             self.canv,
             self.cursor.x * self.unit,
             self.cursor.y * self.unit,
+        )
+
+    @add_element
+    def draw_image(self, *args, **kwargs):
+        return self._draw_image(*args, **kwargs)
+
+    def _draw_image(self, img_path, width=None, height=None, **kwargs):
+        """Draw an image"""
+        canvas = self.canv
+        img = Image(img_path)
+        _width, _height = img.wrapOn(canvas, 0, 0)
+        _width = _width * 72. / 300
+        _height = _height * 72. / 300
+        if width is not None:
+            _width = width
+        if height is not None:
+            _height = height
+        canvas.drawImage(
+            img_path,
+            self.cursor.x * self.unit,
+            self.cursor.y * self.unit - _height,
+            _width,
+            _height,
         )
 
 

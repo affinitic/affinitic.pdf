@@ -220,6 +220,11 @@ class Pdf(object):
         self._verify_element()
         self._currentElement.draw_barcode(value, barHeight, barWidth)
 
+    def add_image(self, img_path, width=None, height=None):
+        """Add an image"""
+        self._verify_element()
+        self._currentElement.draw_image(img_path, width=width, height=height)
+
     def define_background(self, filepath):
         """Define a pdf file to be set as the background for each pages"""
         self._background = filepath
