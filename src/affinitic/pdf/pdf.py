@@ -57,6 +57,7 @@ class Pdf(object):
         self._footer = footer
         self._page_counter = 1
         self._current_height = 0.0
+        self._uids = []
 
         self.localizer = localizer
 
@@ -186,6 +187,9 @@ class Pdf(object):
     def add_table(self, id, style=None):
         """Add a new table an returns the object"""
         self._verify_element()
+        if id in self._uids:
+            raise ValueError("The table id must be unique")
+        self._uids.append(id)
         return Table(self, id, self.get_style(style).name)
 
     def add_h_line(self, color=ColorRGB(50, 50, 50)):
