@@ -273,12 +273,14 @@ class Pdf(object):
     def _merge_pdf(self, io_content, output_file):
         """Add the background into the pdf"""
         output = PdfFileWriter()
-        background = PdfFileReader(open(self._background, 'rb'))
-        content_file = file('/tmp/merge.pdf', 'wb+')
-        content_file.write(io_content)
-        content = PdfFileReader(content_file)
-        for page in content.pages:
-            background_content = background.getPage(0)
-            background_content.mergePage(page)
-            output.addPage(background_content)
-        output.write(output_file)
+        bg_file = open(self._background, 'r')
+        with open("/tmp/merge.pdf", "w") as f:
+            f.write(io_content)
+        with open("/tmp/merge.pdf", "r") as f:
+            content = PdfFileReader(f)
+            for page in content.pages:
+                bg_file.seek(0)
+                new_content = PdfFileReader(bg_file).getPage(0)
+                new_content.mergePage(page)
+                output.addPage(new_content)
+            output.write(output_file)
